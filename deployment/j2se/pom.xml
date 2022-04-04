@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>au.gov.ato.abrs</groupId>
+		<artifactId>dds-camel-service-deployment</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	<groupId>au.gov.ato.abrs</groupId>
+	<artifactId>dds-camel-service-j2se</artifactId>
+	<name>DDS Camel Service::Deployments::j2se</name>
+	<packaging>jar</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-api</artifactId>
+		  </dependency>
+	  
+		  <dependency>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-semconv</artifactId>
+		  </dependency>
+	  
+		  <dependency>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-exporter-jaeger</artifactId>
+		  </dependency>
+	  
+		  <dependency>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-extension-trace-propagators</artifactId>
+		  </dependency>
+	  
+		  <dependency>
+	        <groupId>io.opentelemetry</groupId>
+	        <artifactId>opentelemetry-extension-annotations</artifactId>
+	      </dependency>	  
+	  
+		  <dependency>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-sdk-extension-autoconfigure</artifactId>
+		  </dependency>
+		  
+		  <dependency>
+		    <groupId>io.opentelemetry</groupId>
+		    <artifactId>opentelemetry-exporter-otlp</artifactId>
+		  </dependency>
+		  
+		  <dependency>
+    		<groupId>io.opentelemetry</groupId>
+    		<artifactId>opentelemetry-exporter-prometheus</artifactId>
+		  </dependency>
+	  
+		  <dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-protobuf</artifactId>
+			<version>1.41.0</version>
+		  </dependency>
+
+		  <dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-netty-shaded</artifactId>
+			<version>1.41.0</version>
+		  </dependency>
+
+		<dependency>
+			<groupId>au.gov.ato.abrs</groupId>
+			<artifactId>dds-camel-service-routes</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-cxf</artifactId>
+			<version>${camel-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-jackson</artifactId>
+			<version>${camel-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-json-validator</artifactId>
+			<version>${camel-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-bean-validator</artifactId>
+			<version>${camel-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-openapi-java</artifactId>
+			<version>${camel-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-jetty</artifactId>
+			<version>${camel-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-http</artifactId>
+			<version>${camel-version}</version>
+		</dependency>
+		
+		<dependency>
+    		<groupId>org.apache.camel</groupId>
+    		<artifactId>camel-micrometer</artifactId>
+			<version>${camel-version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-core</artifactId>
+			<version>${camel-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-groovy</artifactId>
+			<version>3.11.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-health</artifactId>
+			<version>3.13.0</version>
+		</dependency>
+
+		<!-- OpenTelemetry -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-opentelemetry</artifactId>
+			<version>${camel-version}</version>
+		</dependency>
+
+		<!-- CDI -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-cdi</artifactId>
+			<version>${camel-version}</version>
+		</dependency>
+		
+		<!-- JMX Support -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-management</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-atlasmap</artifactId>
+			<version>${camel-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.atlasmap</groupId>
+			<artifactId>atlas-api</artifactId>
+			<version>2.3.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.atlasmap</groupId>
+			<artifactId>atlas-core</artifactId>
+			<version>2.3.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.atlasmap</groupId>
+			<artifactId>atlas-java-module</artifactId>
+			<version>2.3.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.atlasmap</groupId>
+			<artifactId>atlas-json-module</artifactId>
+			<version>2.3.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jsonschema2pojo</groupId>
+			<artifactId>jsonschema2pojo-jdk-annotation</artifactId>
+		</dependency>
+		
+		<!-- Apache Commons -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.enterprise</groupId>
+			<artifactId>cdi-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.weld.se</groupId>
+			<artifactId>weld-se-core</artifactId>
+		</dependency>
+
+		<!-- Swagger UI webjar -->
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>swagger-ui</artifactId>
+		</dependency>
+
+		<!-- SLF4J - Bridging all other loggers to logback -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>		
+
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.xml</groupId>
+			<artifactId>webservices-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.xerial.snappy</groupId>
+			<artifactId>snappy-java</artifactId>
+		</dependency>
+
+		<!-- Swagger Parser -->
+		<dependency>
+			<groupId>io.swagger.parser.v3</groupId>
+			<artifactId>swagger-parser</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/io.smallrye/smallrye-health -->
+		<dependency>
+			<groupId>io.smallrye</groupId>
+			<artifactId>smallrye-health</artifactId>
+			<version>4.0.0-RC1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.camel.quarkus</groupId>
+			<artifactId>camel-quarkus-microprofile-health</artifactId>
+			<version>2.5.0</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>io.hawt</groupId>
+			<artifactId>hawtio-embedded</artifactId>
+			<version>2.13.3</version>
+		</dependency>
+
+
+	</dependencies>
+
+
+	<build>
+		<defaultGoal>install</defaultGoal>
+
+		<plugins>
+			<!-- Project dependencies for packaging -->
+			<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/lib</outputDirectory>
+						</configuration>
+					</execution>
+					<!-- Download Prometheus JMX Agent for runtime start with no version -->
+					<execution>
+						<id>prometheus-agent-download</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>io.prometheus.jmx</groupId>
+									<artifactId>jmx_prometheus_javaagent</artifactId>
+									<version>${jmx.prometheus.javaagent.version}</version>
+									<type>jar</type>
+									<overWrite>false</overWrite>
+									<outputDirectory>target/agent</outputDirectory>
+									<destFileName>jmx_prometheus_javaagent.jar</destFileName>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.0</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
+							<mainClass>au.gov.ato.abrs.integration.CamelMain</mainClass>
+							<useUniqueVersions>false</useUniqueVersions>
+						</manifest>
+						<manifestEntries>
+							<Class-Path>.</Class-Path>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<!-- Copy common packaging resources -->
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/configuration</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/../src/main/configuration/</directory>
+									<includes>
+										<include>**/*.*</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				 <groupId>io.hawt</groupId>
+				<artifactId>hawtio-maven-plugin</artifactId>
+				<version>2.12.0</version>
+			 <configuration>
+				 <logClasspath>true</logClasspath>
+				 <port>8192</port>
+				</configuration>
+				</plugin>
+		</plugins>
+
+	</build>
+</project>

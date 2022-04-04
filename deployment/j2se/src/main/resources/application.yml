@@ -1,0 +1,14 @@
+spring.datasource.url: jdbc:h2:file:./h2-db/camunda-h2-database
+
+camel:
+  springboot:
+    name: ServicesRest
+    tracing: true
+  #    main-run-controller: true
+  
+  api:
+    path: /
+  component:
+    servlet:
+      mapping:
+        context-path: /*

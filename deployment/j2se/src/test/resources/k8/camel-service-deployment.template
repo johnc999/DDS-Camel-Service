@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {service.name}-camel-service-deployment-v{service.version}
+  labels:
+    app: {service.name}-camel-service-v{service.version}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {service.name}-camel-service-v{service.version}
+  template:
+    metadata:
+      labels:
+        app: {service.name}-camel-service-v{service.version}
+    spec:
+      containers:
+        - name: {service.name}-camel-service-v{service.version}
+          image: {parent.artifact.name}:{artifact.version}
+          ports:
+            - containerPort: 8080
+            - containerPort: 8081
+          imagePullPolicy: IfNotPresent

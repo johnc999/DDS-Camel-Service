@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Note: MDC traceId & spanId required camel >= 3.12.0 -->
+
+    <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+        <!-- Note: https://loki4j.github.io/loki-logback-appender/docs/configuration -->
+        <!-- Java 8 supported using ApacheHttpSender -->
+        <batchTimeoutMs>30000</batchTimeoutMs>
+        <verbose>false</verbose>
+        <http class="com.github.loki4j.logback.ApacheHttpSender">
+            <url>${loki.push.url}</url>
+        </http>
+
+        <!-- Use protocol buffers instead of JSON for payloads -->
+        <format class="com.github.loki4j.logback.ProtobufEncoder">
+            <label>
+                <pattern>service=${loki.service.name},host=${HOSTNAME},level=%level</pattern>
+            </label>
+            <message>
+                <pattern>host=${HOSTNAME} traceId=%X{traceId} thread=%thread route=%X{camel.routeId} level=%level class=%logger{20} | %msg %ex %n</pattern>
+            </message>
+            <sortByTime>true</sortByTime>
+        </format>
+    </appender>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%boldWhite(%d{yyyy-MM-dd HH:mm:ss.SSS}) %magenta([%thread]) %highlight(%-5level) %cyan(%logger{15}) %magenta(/%X{camel.routeId}/) %yellow({%X{traceId}}) %boldWhite(:) %msg %ex %n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="LOKI" />
+    </root>
+
+    <logger name="org.apache.cxf.services" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+</configuration>
