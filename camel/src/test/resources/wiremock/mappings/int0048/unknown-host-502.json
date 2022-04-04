@@ -1,0 +1,35 @@
+{
+    "request": {
+        "method": "GET",
+        "url": "/api/v1/organisations/validate/email/joe502@test.com",
+        "headers": {
+            "Accept": {
+                "equalTo": "application/json"
+            },
+            "dds-to-impl-route": {
+                "equalTo": "direct:submitEmailValidation"
+            },
+            "UID": {
+                "equalTo": "123456"
+            },
+            "sessionID": {
+                "equalTo": "1234567"
+            },
+            "requestID": {
+                "equalTo": "12345678"
+            }
+        },
+        "bodyPatterns": [
+            {
+                "matches": ""
+            }
+        ]
+    },
+    "response": {
+        "status": 502,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "body": ""
+    }
+}

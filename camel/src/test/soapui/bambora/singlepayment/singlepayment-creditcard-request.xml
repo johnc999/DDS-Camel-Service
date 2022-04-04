@@ -1,0 +1,33 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:dts="http://www.ippayments.com.au/interface/api/dts">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <dts:SubmitSinglePayment>
+            <!--Optional:-->
+            <dts:trnXML>
+                <![CDATA[
+	<Transaction>
+		<custNumber>12345</custNumber>
+		<CustRef>abcd1234</CustRef>
+		<Amount>1000</Amount>
+		<TrnType>1</TrnType>
+		<AccountNumber>123456</AccountNumber>
+		<CreditCard>
+			<SecureTransactionToken>stt_0d9add42-ee82-4efd-b673-426f21c92599</SecureTransactionToken>
+		</CreditCard>
+                <AdditionalReturnValues>
+			<CardType>true</CardType>
+    			<TruncatedCard>true</TruncatedCard>
+    			<ExpM>true</ExpM>
+    			<ExpY>true</ExpY>
+		</AdditionalReturnValues>
+		<Security>
+			<UserName></UserName>
+			<Password></Password>
+		</Security>
+	</Transaction>
+]]>
+            </dts:trnXML>
+        </dts:SubmitSinglePayment>
+    </soapenv:Body>
+</soapenv:Envelope>

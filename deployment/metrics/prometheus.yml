@@ -1,0 +1,24 @@
+# Sample Prometheus config
+# Config reads Prometheus exposed JMX via prometheus Java agent
+# This assumes that your Prometheus instance can access this application on host.docker.internal:9779
+# docker run -p 9090:9090 --mount type=bind,source="$(pwd)"/prometheus/prometheus.yml,target=/etc/prometheus/prometheus.yml,readonly prom/prometheus
+
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+scrape_configs:
+  - job_name: 'Camel Service'
+    metrics_path: '/'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['host.docker.internal:9779']
+
+rule_files:
+  - "alert-rules.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+      - targets: ['host.docker.internal:9093']

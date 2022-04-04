@@ -1,0 +1,27 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dts="http://www.ippayments.com.au/interface/api/dts">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <dts:QueryTransaction>
+            <!--Optional:-->
+            <dts:queryXML>
+
+                <![CDATA[
+         <QueryTransaction>
+      		<Criteria>
+      		<AccountNumber>12345678</AccountNumber>
+            		<TrnStartTimestamp>2021-11-23 00:00:00</TrnStartTimestamp>
+            		<TrnEndTimestamp>2021-11-25 23:59:59</TrnEndTimestamp>
+            		<CustNumber>Int_003</CustNumber>
+            		<CustRef>dev3</CustRef>
+            		<Amount>1090</Amount>
+     		</Criteria>
+     		<Security>
+            		<UserName></UserName>
+			        <Password></Password>
+     		</Security>
+        </QueryTransaction>
+         ]]>
+            </dts:queryXML>
+        </dts:QueryTransaction>
+    </soapenv:Body>
+</soapenv:Envelope>

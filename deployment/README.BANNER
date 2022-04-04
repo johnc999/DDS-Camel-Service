@@ -1,0 +1,7 @@
+To generate banner:
+https://manytools.org/hacker-tools/ascii-banner/
+
+Select font: Banner
+
+Paste into src/main/resources/banner.txt
+
