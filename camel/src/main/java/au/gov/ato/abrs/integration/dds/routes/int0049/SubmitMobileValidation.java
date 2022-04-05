@@ -26,10 +26,10 @@ public class SubmitMobileValidation extends RouteBuilder {
             
         	.routeId(ROUTE_ID)
         	
-            // Protocol invoker will handle errors on a protocol level!!!!!
+            // Protocol invoker will handle errors on a protocol level
             .errorHandler(noErrorHandler())
             
-            .log("header.mobilee param: ${header.mobile}")     
+            .log("header.mobile param: ${header.mobile}")     
             
             .choice()
             .when(simple("${header.mobile} == null || ${header.mobile} == ''"))            
@@ -49,7 +49,7 @@ public class SubmitMobileValidation extends RouteBuilder {
 					MobileResponseResult responseWrapperIn = exchange.getIn().getBody(MobileResponseResult.class);
 					
 					if ("3".equals(responseWrapperIn.getResponse().getVerificationStatus())) {
-						exchange.getIn().setBody(null); 	// generic restinvoker will return http response: 204
+						exchange.getIn().setBody(null); 	// generic rest invoker will return http response status: 204
 					} else {
 						exchange.getIn().setHeader("dds-success-status-code", 200);
 					}

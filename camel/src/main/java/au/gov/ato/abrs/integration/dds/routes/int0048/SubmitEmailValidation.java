@@ -26,7 +26,7 @@ public class SubmitEmailValidation extends RouteBuilder {
             
         	.routeId(ROUTE_ID)
         	
-            // Protocol invoker will handle errors on a protocol level!!!!!
+            // Protocol invoker will handle errors on a protocol level
             .errorHandler(noErrorHandler())
             
             .log("header.email param: ${header.email}")     
