@@ -72,7 +72,7 @@ public class RestValidateEmailAddress extends RouteBuilder {
 	            .responseModel(ErrorMapping.class)
 	        .endResponseMessage()  	 
         .route()
-	        .setHeader("dds-to-impl-route", constant("direct:submitEmailValidation"))
+	        .setHeader("dds-to-impl-route", constant("direct:dds.int0048.submitEmailValidation"))
 	        .to("direct:rest.invoke.dds");
     }
 }

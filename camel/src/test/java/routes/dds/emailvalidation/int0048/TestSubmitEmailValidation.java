@@ -33,13 +33,13 @@ import routes.dds.util.Utils;
 @RunWith(CamelCdiRunner.class)
 public class TestSubmitEmailValidation {
 
-    private static String ROUTE_ENDPOINT = "direct:submitEmailValidation";
+    private static String ROUTE_ENDPOINT = "direct:dds.int0048.submitEmailValidation";
 
     @Inject
     CamelContext context;
 
     @Inject
-    @Uri("direct:submitEmailValidation")
+    @Uri("direct:dds.int0048.submitEmailValidation")
     ProducerTemplate template;
 
     @Inject

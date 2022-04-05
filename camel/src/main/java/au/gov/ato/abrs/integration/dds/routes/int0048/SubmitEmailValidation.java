@@ -22,7 +22,7 @@ public class SubmitEmailValidation extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
-        from("direct:submitEmailValidation")
+        from("direct:dds.int0048.submitEmailValidation")
             
         	.routeId(ROUTE_ID)
         	

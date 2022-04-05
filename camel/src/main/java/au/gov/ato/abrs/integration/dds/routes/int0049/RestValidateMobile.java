@@ -75,7 +75,7 @@ public class RestValidateMobile extends RouteBuilder {
 	            .responseModel(ErrorMapping.class)
 	        .endResponseMessage()  	        
         .route()
-	        .setHeader("dds-to-impl-route", constant("direct:submitMobileValidation"))
+	        .setHeader("dds-to-impl-route", constant("direct:dds.int0049.submitMobileValidation"))
 	        .to("direct:rest.invoke.dds");
     }
 }

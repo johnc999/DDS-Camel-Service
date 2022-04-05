@@ -77,7 +77,7 @@ public class TestRestWrapper {
                     .setHeader("UID", constant("123456"))
                     .setHeader("sessionID", constant("1234567"))
                     .setHeader("requestID", constant("12345678"))
-                    .setHeader("dds-to-impl-route", constant("direct:submitMobileValidation"))
+                    .setHeader("dds-to-impl-route", constant("direct:dds.int0049.submitMobileValidation"))
                     .to("direct:rest.invoke.dds")
                     .to("mock:result");
         }

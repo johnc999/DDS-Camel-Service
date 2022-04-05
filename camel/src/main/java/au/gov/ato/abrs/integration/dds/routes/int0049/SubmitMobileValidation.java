@@ -22,7 +22,7 @@ public class SubmitMobileValidation extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
-        from("direct:submitMobileValidation")
+        from("direct:dds.int0049.submitMobileValidation")
             
         	.routeId(ROUTE_ID)
         	

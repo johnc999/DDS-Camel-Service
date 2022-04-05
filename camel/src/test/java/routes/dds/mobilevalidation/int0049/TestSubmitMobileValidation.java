@@ -33,13 +33,13 @@ import routes.dds.util.Utils;
 @RunWith(CamelCdiRunner.class)
 public class TestSubmitMobileValidation {
 
-    private static String ROUTE_ENDPOINT = "direct:submitMobileValidation";
+    private static String ROUTE_ENDPOINT = "direct:dds.int0049.submitMobileValidation";
 
     @Inject
     CamelContext context;
 
     @Inject
-    @Uri("direct:submitMobileValidation")
+    @Uri("direct:dds.int0049.submitMobileValidation")
     ProducerTemplate template;
 
     @Inject

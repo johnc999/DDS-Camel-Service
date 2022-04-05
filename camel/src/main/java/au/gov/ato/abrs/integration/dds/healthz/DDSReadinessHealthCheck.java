@@ -31,7 +31,7 @@ public class DDSReadinessHealthCheck extends AbstractHealthCheck {
     private static Logger log = LoggerFactory.getLogger(DDSReadinessHealthCheck.class);
     
     @Inject
-    @Uri("direct:submitEmailValidation")
+    @Uri("direct:dds.int0048.submitEmailValidation")
     ProducerTemplate template;
 
     @PostConstruct

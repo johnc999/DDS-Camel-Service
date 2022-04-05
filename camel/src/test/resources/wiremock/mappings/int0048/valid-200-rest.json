@@ -7,7 +7,7 @@
                 "equalTo": "application/json"
             },
             "dds-to-impl-route": {
-                "equalTo": "direct:submitEmailValidation"
+                "equalTo": "direct:dds.int0048.submitEmailValidation"
             },
             "UID": {
                 "equalTo": "123456"
