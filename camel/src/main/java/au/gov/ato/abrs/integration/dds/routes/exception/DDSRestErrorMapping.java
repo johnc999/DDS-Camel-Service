@@ -15,11 +15,18 @@ import java.util.List;
 public class DDSRestErrorMapping extends RestErrorMapping {
     
     public DDSRestErrorMapping(Throwable cause, String traceId) {
-        super(cause, traceId);
+        // Initial generic mappings
+		super(cause, traceId);  
 
+		// Specific camel service mappings
         if (cause instanceof HttpOperationFailedException) {
         	processHttpOperationFailedException((HttpOperationFailedException)cause, traceId);
         	switch (((HttpOperationFailedException)cause).getStatusCode()) {
+// TODO: Code Review - Interesting ..
+//                     1) Recon only set status codes that are defined in your OpenAPI spec for the rest calls
+//                        So may need to map 406 to 502 for example
+//                        See ASIC for example on translating. 
+//                        Looking at SAP, we may need to do the same there to harden the error handling a bit 				
         		case 400: setStatusCode(400); break;
         		case 401: setStatusCode(401); break;
         		case 403: setStatusCode(403); break;
@@ -32,16 +39,23 @@ public class DDSRestErrorMapping extends RestErrorMapping {
         		default: setStatusCode(500); break;
         	}
         	setStatusCode(((HttpOperationFailedException) cause).getStatusCode());
+// TODO: Code Review - This should be handled by RestErrorMapping parent class .. check code and confirm			
         } else if (cause instanceof ValidationException) {
         	processValidationException((ValidationException)cause, traceId);
         	setStatusCode(400);          	
-        } else if (cause instanceof IOException) {
+// TODO: Code Review - Possibly here because the .toD is not throwing an exception?
+} else if (cause instanceof IOException) {
         	processIOException((IOException)cause, traceId);
         	setStatusCode(503);
+// TODO: Code Review - Interesting exception this ... 
+//                     I think this would be a good exception to intercept in TechArch and handle generically for all projects
+//                     Build error that uses getType to state what was expected in the body
+//                     Maybe 422 status code?
         } else if (cause instanceof InvalidPayloadException) {
         	processInvalidPayloadException((InvalidPayloadException)cause, traceId);
         	setStatusCode(503);
         } else {
+// TODO: Code Review - Already handled in TechArchby RestErrorMapping parent class		
         	processThrowable(cause, traceId);
         	setStatusCode(503);        	
         }

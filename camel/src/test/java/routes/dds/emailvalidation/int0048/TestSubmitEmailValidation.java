@@ -1,3 +1,4 @@
+// TODO: Code Review - Maybe routes.dds.int0048 to match other services
 package routes.dds.emailvalidation.int0048;
 
 import static org.junit.Assert.assertTrue;
@@ -30,6 +31,8 @@ import au.gov.ato.abrs.integration.configuration.ConfigurationUtility;
 import au.gov.ato.abrs.integration.dds.model.EmailResponseResult;
 import routes.dds.util.Utils;
 
+// TODO: Code Review - Any reason why we have bambora soap UI references under resources?
+
 @RunWith(CamelCdiRunner.class)
 public class TestSubmitEmailValidation {
 
@@ -42,6 +45,8 @@ public class TestSubmitEmailValidation {
     @Uri("direct:dds.int0048.submitEmailValidation")
     ProducerTemplate template;
 
+// TODO: Code Review - Should be testing business route, not REST route .. much easier testing and asserts work on Java ojects, not JSON
+//                     Only need 1 test to test wrapper .. TestRestWrapper    
     @Inject
     @Uri("direct:rest.invoke.dds")
     ProducerTemplate restTemplate;

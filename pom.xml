@@ -12,15 +12,20 @@
     <name>DDS Camel Service</name>
 
     <properties>
-        <!-- 
+      <!-- TODO: Code Review - Missing build.timestamp and maven.build.timestamp.format
+                               Start deployment j2se and see what the build date is? -->
+
+
+
+        <!-- TODO: Code Review - Why is this still commented?
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
          -->
          
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    	<maven.compiler.source>11</maven.compiler.source>
-    	<maven.compiler.target>11</maven.compiler.target>
+      	<maven.compiler.source>11</maven.compiler.source>
+      	<maven.compiler.target>11</maven.compiler.target>
 
         <camel-version>3.14.1</camel-version>
         <jackson-version>2.11.4</jackson-version>
@@ -191,6 +196,7 @@
 		        <version>1.3.1</version>
 		      </dependency>		      		
 
+<!-- TODO: Code Review - Whats going on with indentation -->          
             <!-- Jwt Support -->
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
@@ -269,6 +275,7 @@
                 <version>3.1.7.Final</version>
             </dependency>
 
+<!-- TODO: Code Review - Already importing camel pom? -->
 		      <dependency>
 		        <groupId>org.apache.camel</groupId>
 		        <artifactId>camel-aws-s3</artifactId>

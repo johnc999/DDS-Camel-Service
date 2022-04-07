@@ -20,7 +20,10 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-
+<!-- TODO: Code Review - Alot of dependencies not used by the module, why are they defined 
+                        Only use what you need
+                     JDK 11 support stuff also alot?
+-->
         <dependency>
             <groupId>au.gov.ato</groupId>
             <artifactId>TechnicalArchitecture</artifactId>

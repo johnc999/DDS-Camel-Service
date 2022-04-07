@@ -78,7 +78,9 @@ public class RestInvoker extends RouteBuilder {
             .choice()
                 .when(simple("${bodyAs(java.lang.Throwable)} != null"))
                     // Error occured, assuming body is the exception
+// TODO: Code Review - Ok?                    
                 	.log("HELLOOOOOOOOOOOOOOOOOOOOOOOOO")
+// TODO: Code Review - There is a sample log line in the exception handler?                    
                 	.log("${bodyAs(java.lang.Throwable)}")
                     .convertBodyTo(DDSRestErrorMapping.class)    // Will also set HTTP_RESPONSE_CODE
                 .endChoice()           

@@ -72,7 +72,8 @@
 			<artifactId>dds-camel-service-routes</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
+<!-- TODO: Code Review - Dont need versions in dependencies as they should be in parent Camel BOM -->
+<!-- TODO: Code Review - dependent in camel project should be removed and these dependencies don't have to be defined -->
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-cxf</artifactId>
