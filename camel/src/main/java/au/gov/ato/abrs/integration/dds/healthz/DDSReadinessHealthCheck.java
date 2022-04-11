@@ -53,11 +53,8 @@ public class DDSReadinessHealthCheck extends AbstractHealthCheck {
         	// need to check if these can be random numbers
             Exchange exchange = ExchangeBuilder.anExchange(getCamelContext())
                     .withBody(null)
-// TODO: Code Review - UID, sessionID, requestID leave out for now .. we will need to solve this later on with JWT understanding etc
                     .withHeader("email", VALID_EMAIL)
-                    .withHeader("UID", UUID.randomUUID().toString())
-                    .withHeader("sessionID", UUID.randomUUID().toString())
-                    .withHeader("requestID", UUID.randomUUID().toString())
+                    // Remove for now: .withHeader("UID", UUID.randomUUID().toString()) .withHeader("sessionID", UUID.randomUUID().toString()) .withHeader("requestID", UUID.randomUUID().toString())
                     .build();
 
             Exchange exchangeOut = template.send(exchange);

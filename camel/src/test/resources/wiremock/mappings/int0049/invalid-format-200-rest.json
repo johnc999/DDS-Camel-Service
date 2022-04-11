@@ -8,16 +8,7 @@
             },
             "dds-to-impl-route": {
                 "equalTo": "direct:dds.int0049.submitMobileValidation"
-            },
-            "UID": {
-                "equalTo": "123456"
-            },
-            "sessionID": {
-                "equalTo": "1234567"
-            },
-            "requestID": {
-                "equalTo": "12345678"
-            }          
+            }        
         },
         "bodyPatterns": [
             {

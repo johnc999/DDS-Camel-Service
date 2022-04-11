@@ -71,10 +71,7 @@ public class TestSubmitMobileValidation {
         if (mobile != null) {
         	headers.put("mobile", mobile);
         }
-        // Check if required:
-        headers.put("UID", "123456");
-        headers.put("sessionID", "1234567");
-        headers.put("requestID", "12345678");
+        // Remove for now: headers.put("UID", "123456"); headers.put("sessionID", "1234567"); headers.put("requestID", "12345678");
         return headers;
     }
 

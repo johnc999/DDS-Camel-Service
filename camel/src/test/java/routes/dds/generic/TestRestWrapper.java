@@ -73,10 +73,8 @@ public class TestRestWrapper {
             from("direct:test-rest")
                     .id("test-rest-route")
                     .setHeader("mobile", constant("0478000000"))
-                    .setHeader("Accept", constant("application/json"))
-                    .setHeader("UID", constant("123456"))
-                    .setHeader("sessionID", constant("1234567"))
-                    .setHeader("requestID", constant("12345678"))
+                    .setHeader("Accept", constant("application/json"))                    
+                    // Remove for now: .setHeader("UID", constant("123456")) .setHeader("sessionID", constant("1234567")) .setHeader("requestID", constant("12345678"))
                     .setHeader("dds-to-impl-route", constant("direct:dds.int0049.submitMobileValidation"))
                     .to("direct:rest.invoke.dds")
                     .to("mock:result");
