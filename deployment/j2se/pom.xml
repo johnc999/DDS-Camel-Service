@@ -15,192 +15,57 @@
 	<packaging>jar</packaging>
 
 	<dependencies>
-		<dependency>
-			<groupId>io.opentelemetry</groupId>
-			<artifactId>opentelemetry-api</artifactId>
-		  </dependency>
-	  
-		  <dependency>
-			<groupId>io.opentelemetry</groupId>
-			<artifactId>opentelemetry-semconv</artifactId>
-		  </dependency>
-	  
-		  <dependency>
-			<groupId>io.opentelemetry</groupId>
-			<artifactId>opentelemetry-exporter-jaeger</artifactId>
-		  </dependency>
-	  
-		  <dependency>
-			<groupId>io.opentelemetry</groupId>
-			<artifactId>opentelemetry-extension-trace-propagators</artifactId>
-		  </dependency>
-	  
-		  <dependency>
-	        <groupId>io.opentelemetry</groupId>
-	        <artifactId>opentelemetry-extension-annotations</artifactId>
-	      </dependency>	  
-	  
-		  <dependency>
-			<groupId>io.opentelemetry</groupId>
-			<artifactId>opentelemetry-sdk-extension-autoconfigure</artifactId>
-		  </dependency>
-		  
-		  <dependency>
-		    <groupId>io.opentelemetry</groupId>
-		    <artifactId>opentelemetry-exporter-otlp</artifactId>
-		  </dependency>
-		  
-		  <dependency>
-    		<groupId>io.opentelemetry</groupId>
-    		<artifactId>opentelemetry-exporter-prometheus</artifactId>
-		  </dependency>
-	  
-		  <dependency>
-			<groupId>io.grpc</groupId>
-			<artifactId>grpc-protobuf</artifactId>
-			<version>1.41.0</version>
-		  </dependency>
-
-		  <dependency>
-			<groupId>io.grpc</groupId>
-			<artifactId>grpc-netty-shaded</artifactId>
-			<version>1.41.0</version>
-		  </dependency>
-
+		
 		<dependency>
 			<groupId>au.gov.ato.abrs</groupId>
 			<artifactId>dds-camel-service-routes</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-<!-- TODO: Code Review - Dont need versions in dependencies as they should be in parent Camel BOM -->
-<!-- TODO: Code Review - dependent in camel project should be removed and these dependencies don't have to be defined -->
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-cxf</artifactId>
-			<version>${camel-version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-jackson</artifactId>
-			<version>${camel-version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-json-validator</artifactId>
-			<version>${camel-version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-bean-validator</artifactId>
-			<version>${camel-version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-openapi-java</artifactId>
-			<version>${camel-version}</version>
-		</dependency>
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-jetty</artifactId>
-			<version>${camel-version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-http</artifactId>
-			<version>${camel-version}</version>
 		</dependency>
-		
-		<dependency>
-    		<groupId>org.apache.camel</groupId>
-    		<artifactId>camel-micrometer</artifactId>
-			<version>${camel-version}</version>
-		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-core</artifactId>
-			<version>${camel-version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-groovy</artifactId>
-			<version>3.11.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-health</artifactId>
-			<version>3.13.0</version>
 		</dependency>
 
 		<!-- OpenTelemetry -->
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-opentelemetry</artifactId>
-			<version>${camel-version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-openapi-java</artifactId>
 		</dependency>
 
 		<!-- CDI -->
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-cdi</artifactId>
-			<version>${camel-version}</version>
 		</dependency>
-		
+
 		<!-- JMX Support -->
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-management</artifactId>
 		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-atlasmap</artifactId>
-			<version>${camel-version}</version>
-		</dependency>
 
-		<dependency>
-			<groupId>io.atlasmap</groupId>
-			<artifactId>atlas-api</artifactId>
-			<version>2.3.2</version>
-		</dependency>
-
-		<dependency>
-			<groupId>io.atlasmap</groupId>
-			<artifactId>atlas-core</artifactId>
-			<version>2.3.2</version>
-		</dependency>
-
-		<dependency>
-			<groupId>io.atlasmap</groupId>
-			<artifactId>atlas-java-module</artifactId>
-			<version>2.3.2</version>
-		</dependency>
-
-		<dependency>
-			<groupId>io.atlasmap</groupId>
-			<artifactId>atlas-json-module</artifactId>
-			<version>2.3.2</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jsonschema2pojo</groupId>
-			<artifactId>jsonschema2pojo-jdk-annotation</artifactId>
-		</dependency>
-		
 		<!-- Apache Commons -->
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -257,7 +122,7 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-		</dependency>		
+		</dependency>
 
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
@@ -294,16 +159,13 @@
 			<version>2.5.0</version>
 		</dependency>
 
-
 		<dependency>
 			<groupId>io.hawt</groupId>
 			<artifactId>hawtio-embedded</artifactId>
 			<version>2.13.3</version>
 		</dependency>
 
-
 	</dependencies>
-
 
 	<build>
 		<defaultGoal>install</defaultGoal>
@@ -391,14 +253,14 @@
 				</executions>
 			</plugin>
 			<plugin>
-				 <groupId>io.hawt</groupId>
+				<groupId>io.hawt</groupId>
 				<artifactId>hawtio-maven-plugin</artifactId>
 				<version>2.12.0</version>
-			 <configuration>
-				 <logClasspath>true</logClasspath>
-				 <port>8192</port>
+				<configuration>
+					<logClasspath>true</logClasspath>
+					<port>8192</port>
 				</configuration>
-				</plugin>
+			</plugin>
 		</plugins>
 
 	</build>

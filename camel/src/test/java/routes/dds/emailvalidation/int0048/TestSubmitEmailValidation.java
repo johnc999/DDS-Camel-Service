@@ -31,8 +31,6 @@ import au.gov.ato.abrs.integration.configuration.ConfigurationUtility;
 import au.gov.ato.abrs.integration.dds.model.EmailResponseResult;
 import routes.dds.util.Utils;
 
-// TODO: Code Review - Any reason why we have bambora soap UI references under resources?
-
 @RunWith(CamelCdiRunner.class)
 public class TestSubmitEmailValidation {
 
