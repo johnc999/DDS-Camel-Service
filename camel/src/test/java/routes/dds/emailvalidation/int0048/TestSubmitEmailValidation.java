@@ -34,8 +34,8 @@ import routes.dds.util.Utils;
 @RunWith(CamelCdiRunner.class)
 public class TestSubmitEmailValidation {
 
-    private static String ROUTE_ENDPOINT = "direct:dds.int0048.submitEmailValidation";
-
+    private static String ROUTE_EMAIL_ENDPOINT = "direct:dds.int0048.submitEmailValidation";
+    
     @Inject
     CamelContext context;
 
@@ -66,10 +66,10 @@ public class TestSubmitEmailValidation {
         }
     };
 
-    private Map<String, Object> createHeaders(boolean restCall, String email) {
+    private Map<String, Object> createEmailHeaders(boolean restCall, String email) {
         Map<String, Object> headers = new HashMap<>();
         if (restCall) {
-        	headers.put("dds-to-impl-route", ROUTE_ENDPOINT);
+        	headers.put("dds-to-impl-route", ROUTE_EMAIL_ENDPOINT);
         }
         if (email != null) {
         	headers.put("email", email);
@@ -79,29 +79,13 @@ public class TestSubmitEmailValidation {
     }    
     
     @Test
-    public void testRestValidEmailValidation() throws Exception {
-    	
-    	String emailAddress = "joe@test.com";
-
-        Exchange exchange = new DefaultExchange(context);
-        exchange.getIn().setBody(new ByteArrayInputStream(new byte[]{}));
-        exchange.getIn().setHeaders(createHeaders(true, emailAddress));
-
-        Exchange exchangeOut = restTemplate.send(exchange);
-        EmailResponseResult response = exchangeOut.getIn().getBody(EmailResponseResult.class);
-        assertTrue("verified".equalsIgnoreCase(response.getResponse().getVerificationLevelDescription()));
-        assertTrue("verified".equalsIgnoreCase(response.getResponse().getVerificationMessage()));
-        assertTrue("200".equals(exchangeOut.getIn().getHeader(Exchange.HTTP_RESPONSE_CODE).toString()));
-    }
-
-    @Test
     public void testValidEmailValidation() throws Exception {
     	
     	String emailAddress = "joe200@test.com";
 
         Exchange exchange = new DefaultExchange(context);
         exchange.getIn().setBody(new ByteArrayInputStream(new byte[]{}));
-        exchange.getIn().setHeaders(createHeaders(false, emailAddress));
+        exchange.getIn().setHeaders(createEmailHeaders(false, emailAddress));
 
         Exchange exchangeOut = template.send(exchange);
         EmailResponseResult response = exchangeOut.getIn().getBody(EmailResponseResult.class);
@@ -109,39 +93,6 @@ public class TestSubmitEmailValidation {
         assertTrue("verified".equalsIgnoreCase(response.getResponse().getVerificationMessage()));
         assertTrue("200".equals(exchangeOut.getIn().getHeader(Exchange.HTTP_RESPONSE_CODE).toString()));
     }    
-    
-    @Test
-    public void testBadRequestEmailMapping() throws Exception {
-    	
-        String emailAddress = "joe400@test.com";
-    	
-        Exchange exchange = new DefaultExchange(context);
-        exchange.getIn().setBody(new ByteArrayInputStream(new byte[]{}));
-        exchange.getIn().setHeaders(createHeaders(true, emailAddress));
-        
-        Exchange exchangeOut = restTemplate.send(exchange);               
-        
-        String json = exchangeOut.getMessage().getBody(String.class);
-        assertTrue(json != null);
-        assertTrue(json.contains("DDS Operation Failed: HTTP operation failed"));
-        assertTrue(json.contains("with statusCode: 400, Bad Request\",\"code\":\"error\",\"severity\":\"error\""));
-    }  
-    
-    @Test
-    public void testUnknownHostEmailValidation() throws Exception {
-    	
-    	String emailAddress = "joe502@test.com";
-
-        Exchange exchange = new DefaultExchange(context);
-        exchange.getIn().setBody(new ByteArrayInputStream(new byte[]{}));
-        exchange.getIn().setHeaders(createHeaders(true, emailAddress));
-
-        Exchange exchangeOut = restTemplate.send(exchange);        
-        String json = exchangeOut.getMessage().getBody(String.class);
-        assertTrue(json != null);
-        assertTrue(json.contains("DDS Operation Failed: HTTP operation failed"));
-        assertTrue(json.contains("with statusCode: 502, Bad Gateway\",\"code\":\"error\",\"severity\":\"error\""));
-    }  
     
     Properties override = new Properties();
 

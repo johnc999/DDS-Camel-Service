@@ -1,4 +1,3 @@
-# TODO: Code Review - Not the latest template as per email sent out
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,10 +14,36 @@ spec:
       labels:
         app: {service.name}-camel-service-v{service.version}
     spec:
-      containers:
+      containers:      
         - name: {service.name}-camel-service-v{service.version}
           image: {parent.artifact.name}:{artifact.version}
           ports:
             - containerPort: 8080
             - containerPort: 8081
           imagePullPolicy: IfNotPresent
+          startupProbe:
+            httpGet:
+              path: /api/v{service.version}/{service.name}/healthz/liveness
+              port: 8081
+            failureThreshold: 30
+            periodSeconds: 30
+          livenessProbe:
+            httpGet:
+              path: /api/v{service.version}/{service.name}/healthz/liveness
+              port: 8081
+              httpHeaders:
+                - name: X-HEALTHZ-PROBER
+                  value: K8
+            successThreshold: 1
+            failureThreshold: 2
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /api/v{service.version}/{service.name}/healthz/readiness
+              port: 8081
+              httpHeaders:
+                - name: X-HEALTHZ-PROBER
+                  value: K8
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            timeoutSeconds: 30

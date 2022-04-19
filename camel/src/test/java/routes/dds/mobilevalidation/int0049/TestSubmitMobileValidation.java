@@ -33,7 +33,7 @@ import routes.dds.util.Utils;
 @RunWith(CamelCdiRunner.class)
 public class TestSubmitMobileValidation {
 
-    private static String ROUTE_ENDPOINT = "direct:dds.int0049.submitMobileValidation";
+    private static String ROUTE_MOBILE_ENDPOINT = "direct:dds.int0049.submitMobileValidation";
 
     @Inject
     CamelContext context;
@@ -63,10 +63,10 @@ public class TestSubmitMobileValidation {
         }
     };
 
-    private Map<String, Object> createHeaders(boolean restCall, String mobile) {
+    private Map<String, Object> createMobileHeaders(boolean restCall, String mobile) {
         Map<String, Object> headers = new HashMap<>();
         if (restCall) {
-        	headers.put("dds-to-impl-route", ROUTE_ENDPOINT);
+        	headers.put("dds-to-impl-route", ROUTE_MOBILE_ENDPOINT);
         }
         if (mobile != null) {
         	headers.put("mobile", mobile);
@@ -76,45 +76,13 @@ public class TestSubmitMobileValidation {
     }
 
     @Test
-    public void testRestInvalidFormatMobileValidation() throws Exception {
-    	
-    	String mobile = "0411-777-999";
-    	
-        Exchange exchange = new DefaultExchange(context);
-        exchange.getIn().setBody(new ByteArrayInputStream(new byte[]{}));
-        exchange.getIn().setHeaders(createHeaders(true, mobile));
-        
-        Exchange exchangeOut = restTemplate.send(exchange);
-        String json = exchangeOut.getMessage().getBody(String.class);
-
-        assertTrue(json != null);
-        assertTrue("{\"response\":{\"verificationLevelDescription\":\"Invalid format\",\"verificationStatus\":\"0\"}}".equals(json));
-    }
-
-    @Test
-    public void testRestValidFormatMobileValidation() throws Exception {
-    	
-    	String mobile = "0478000000";
-    	
-        Exchange exchange = new DefaultExchange(context);
-        exchange.getIn().setBody(new ByteArrayInputStream(new byte[]{}));
-        exchange.getIn().setHeaders(createHeaders(true, mobile));
-        
-        Exchange exchangeOut = restTemplate.send(exchange);
-        String result = exchangeOut.getMessage().getBody(String.class);
-
-        assertTrue("null".equals(result));
-        assertTrue("204".equals(exchangeOut.getIn().getHeader(Exchange.HTTP_RESPONSE_CODE).toString()));
-    }
-
-    @Test
     public void testInvalidFormatMobileValidation() throws Exception {
     	
     	String mobile = "0411-777-222";
 
         Exchange exchange = new DefaultExchange(context);
         exchange.getIn().setBody(new ByteArrayInputStream(new byte[]{}));
-        exchange.getIn().setHeaders(createHeaders(false, mobile));
+        exchange.getIn().setHeaders(createMobileHeaders(false, mobile));
 
         Exchange exchangeOut = template.send(exchange);
         MobileResponseResult response = exchangeOut.getIn().getBody(MobileResponseResult.class);
@@ -131,7 +99,7 @@ public class TestSubmitMobileValidation {
 
         Exchange exchange = new DefaultExchange(context);
         exchange.getIn().setBody(new ByteArrayInputStream(new byte[]{}));
-        exchange.getIn().setHeaders(createHeaders(false, mobile));
+        exchange.getIn().setHeaders(createMobileHeaders(false, mobile));
 
         Exchange exchangeOut = template.send(exchange);
         MobileResponseResult response = exchangeOut.getIn().getBody(MobileResponseResult.class);
@@ -148,7 +116,7 @@ public class TestSubmitMobileValidation {
 
         Exchange exchange = new DefaultExchange(context);
         exchange.getIn().setBody(new ByteArrayInputStream(new byte[]{}));
-        exchange.getIn().setHeaders(createHeaders(false, mobile));
+        exchange.getIn().setHeaders(createMobileHeaders(false, mobile));
 
         Exchange exchangeOut = template.send(exchange);
         MobileResponseResult response = exchangeOut.getIn().getBody(MobileResponseResult.class);
@@ -166,7 +134,7 @@ public class TestSubmitMobileValidation {
 
         Exchange exchange = new DefaultExchange(context);
         exchange.getIn().setBody(new ByteArrayInputStream(new byte[]{}));
-        exchange.getIn().setHeaders(createHeaders(false, mobile));
+        exchange.getIn().setHeaders(createMobileHeaders(false, mobile));
 
         Exchange exchangeOut = template.send(exchange);
         MobileResponseResult response = exchangeOut.getIn().getBody(MobileResponseResult.class);
@@ -181,7 +149,7 @@ public class TestSubmitMobileValidation {
 
         Exchange exchange = new DefaultExchange(context);
         exchange.getIn().setBody(new ByteArrayInputStream(new byte[]{}));
-        exchange.getIn().setHeaders(createHeaders(false, mobile));
+        exchange.getIn().setHeaders(createMobileHeaders(false, mobile));
 
         Exchange exchangeOut = template.send(exchange);
         MobileResponseResult response = exchangeOut.getIn().getBody(MobileResponseResult.class);
@@ -199,7 +167,7 @@ public class TestSubmitMobileValidation {
 
         Exchange exchange = new DefaultExchange(context);
         exchange.getIn().setBody(new ByteArrayInputStream(new byte[]{}));
-        exchange.getIn().setHeaders(createHeaders(false, mobile));
+        exchange.getIn().setHeaders(createMobileHeaders(false, mobile));
 
         Exchange exchangeOut = template.send(exchange);
         MobileResponseResult response = exchangeOut.getIn().getBody(MobileResponseResult.class);
@@ -207,42 +175,7 @@ public class TestSubmitMobileValidation {
         assertTrue("Call barred".equals(response.getResponse().getVerificationLevelDescription()));
         assertTrue("5".equals(response.getResponse().getVerificationStatus()));
         assertTrue("200".equals(exchangeOut.getIn().getHeader(Exchange.HTTP_RESPONSE_CODE).toString()));
-    }  
-    
-    @Test
-    public void testBadRequestMobileMapping() throws Exception {
-    	
-        String mobile = "0478400400";
-    	
-        Exchange exchange = new DefaultExchange(context);
-        exchange.getIn().setBody(new ByteArrayInputStream(new byte[]{}));
-        exchange.getIn().setHeaders(createHeaders(true, mobile));
-        
-        Exchange exchangeOut = restTemplate.send(exchange);               
-        
-        String json = exchangeOut.getMessage().getBody(String.class);
-        assertTrue(json != null);
-        assertTrue(json.contains("DDS Operation Failed: HTTP operation failed"));
-        assertTrue(json.contains("with statusCode: 400, Bad Request\",\"code\":\"error\",\"severity\":\"error\""));
-    }  
-    
-    @Test
-    public void testUnknownHostMobileValidation() throws Exception {
-    	
-    	String mobile = "0478666776";
-
-        Exchange exchange = new DefaultExchange(context);
-        exchange.getIn().setBody(new ByteArrayInputStream(new byte[]{}));
-        exchange.getIn().setHeaders(createHeaders(true, mobile));
-
-        Exchange exchangeOut = restTemplate.send(exchange);        
-        // DDSRestErrorMapping errorMapping = exchangeOut.getMessage().getBody(DDSRestErrorMapping.class);
-        String json = exchangeOut.getMessage().getBody(String.class);
-        assertTrue(json != null);
-        assertTrue(json.contains("DDS Operation Failed: HTTP operation failed"));
-        assertTrue(json.contains("with statusCode: 502, Bad Gateway\",\"code\":\"error\",\"severity\":\"error\""));
-    }  
-    
+    }        
     
     Properties override = new Properties();
 

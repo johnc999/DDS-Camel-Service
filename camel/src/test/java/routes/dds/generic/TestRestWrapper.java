@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import au.gov.ato.abrs.integration.Module;
 import au.gov.ato.abrs.integration.configuration.ConfigurationUtility;
+import au.gov.ato.abrs.integration.dds.model.EmailResponseResult;
 import routes.dds.util.Utils;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
@@ -32,11 +33,15 @@ import static org.junit.Assert.assertTrue;
 @RunWith(CamelCdiRunner.class)
 public class TestRestWrapper {
 	
+	private static String ROUTE_EMAIL_ENDPOINT = "direct:dds.int0048.submitEmailValidation";
+	
+	private static String ROUTE_MOBILE_ENDPOINT = "direct:dds.int0049.submitMobileValidation";
+	
 	@Inject
     CamelContext context;
-
+    
     @Inject
-    @Uri("direct:test-rest")
+    @Uri("direct:rest.invoke.dds")
     ProducerTemplate restTemplate;
 
     @Rule
@@ -65,37 +70,145 @@ public class TestRestWrapper {
         // Clear override properties
         override.clear();
     }
-    
 
-    static class TestRoute extends RouteBuilder {
-        @Override
-        public void configure() throws Exception {
-            from("direct:test-rest")
-                    .id("test-rest-route")
-                    .setHeader("mobile", constant("0478000000"))
-                    .setHeader("Accept", constant("application/json"))                    
-                    // Remove for now: .setHeader("UID", constant("123456")) .setHeader("sessionID", constant("1234567")) .setHeader("requestID", constant("12345678"))
-                    .setHeader("dds-to-impl-route", constant("direct:dds.int0049.submitMobileValidation"))
-                    .to("direct:rest.invoke.dds")
-                    .to("mock:result");
+    // TODO: Code Review - Need  -ve test(s) to ensure testing standard errors are being mapped correctly
+    
+    private Map<String, Object> createEmailHeaders(boolean restCall, String email) {
+        Map<String, Object> headers = new HashMap<>();
+        if (restCall) {
+        	headers.put("dds-to-impl-route", ROUTE_EMAIL_ENDPOINT);
         }
+        if (email != null) {
+        	headers.put("email", email);
+        }
+        // Remove for now: headers.put("UID", "123456"); headers.put("sessionID", "1234567"); headers.put("requestID", "12345678");
+        return headers;
+    }  
+    
+    private Map<String, Object> createMobileHeaders(boolean restCall, String mobile) {
+        Map<String, Object> headers = new HashMap<>();
+        if (restCall) {
+        	headers.put("dds-to-impl-route", ROUTE_MOBILE_ENDPOINT);
+        }
+        if (mobile != null) {
+        	headers.put("mobile", mobile);
+        }
+        // Remove for now: headers.put("UID", "123456"); headers.put("sessionID", "1234567"); headers.put("requestID", "12345678");
+        return headers;
     }
     
     @Test
-    public void testSuccess() throws Exception {
-        Map<String, Object> headers = new HashMap<>();
+    public void testRestValidEmailValidation() throws Exception {
+    	
+    	String emailAddress = "joe@test.com";
 
         Exchange exchange = new DefaultExchange(context);
         exchange.getIn().setBody(new ByteArrayInputStream(new byte[]{}));
-        exchange.getIn().setHeaders(headers);
+        exchange.getIn().setHeaders(createEmailHeaders(true, emailAddress));
 
-        Exchange exchangeOut = restTemplate.send("direct:test-rest", exchange);
-        String body = exchangeOut.getMessage().getBody(String.class);
+        Exchange exchangeOut = restTemplate.send(exchange);
+        EmailResponseResult response = exchangeOut.getIn().getBody(EmailResponseResult.class);
+        assertTrue("verified".equalsIgnoreCase(response.getResponse().getVerificationLevelDescription()));
+        assertTrue("verified".equalsIgnoreCase(response.getResponse().getVerificationMessage()));
+        assertTrue("200".equals(exchangeOut.getIn().getHeader(Exchange.HTTP_RESPONSE_CODE).toString()));
+    }
+    
+    @Test
+    public void testBadRequestEmailMapping() throws Exception {
+    	
+        String emailAddress = "joe400@test.com";
+    	
+        Exchange exchange = new DefaultExchange(context);
+        exchange.getIn().setBody(new ByteArrayInputStream(new byte[]{}));
+        exchange.getIn().setHeaders(createEmailHeaders(true, emailAddress));
+        
+        Exchange exchangeOut = restTemplate.send(exchange);               
+        
+        String json = exchangeOut.getMessage().getBody(String.class);
+        assertTrue(json != null);
+        assertTrue(json.contains("DDS Operation Failed: HTTP operation failed"));
+        assertTrue(json.contains("with statusCode: 400, Bad Request\",\"code\":\"error\",\"severity\":\"error\""));
+    }  
+    
+    @Test
+    public void testUnknownHostEmailValidation() throws Exception {
+    	
+    	String emailAddress = "joe502@test.com";
 
-        assertTrue("null".equals(body));
-        assertEquals(204, (int)exchangeOut.getMessage().getHeader(Exchange.HTTP_RESPONSE_CODE, Integer.class));
+        Exchange exchange = new DefaultExchange(context);
+        exchange.getIn().setBody(new ByteArrayInputStream(new byte[]{}));
+        exchange.getIn().setHeaders(createEmailHeaders(true, emailAddress));
+
+        Exchange exchangeOut = restTemplate.send(exchange);        
+        String json = exchangeOut.getMessage().getBody(String.class);
+        assertTrue(json != null);
+        assertTrue(json.contains("DDS Operation Failed: HTTP operation failed"));
+        assertTrue(json.contains("with statusCode: 502, Bad Gateway\",\"code\":\"error\",\"severity\":\"error\""));
+    }  
+    
+    @Test
+    public void testRestInvalidFormatMobileValidation() throws Exception {
+    	
+    	String mobile = "0411-777-999";
+    	
+        Exchange exchange = new DefaultExchange(context);
+        exchange.getIn().setBody(new ByteArrayInputStream(new byte[]{}));
+        exchange.getIn().setHeaders(createMobileHeaders(true, mobile));
+        
+        Exchange exchangeOut = restTemplate.send(exchange);
+        String json = exchangeOut.getMessage().getBody(String.class);
+
+        assertTrue(json != null);
+        assertTrue("{\"response\":{\"verificationLevelDescription\":\"Invalid format\",\"verificationStatus\":\"0\"}}".equals(json));
     }
 
+    @Test
+    public void testRestValidFormatMobileValidation() throws Exception {
+    	
+    	String mobile = "0478000000";
+    	
+        Exchange exchange = new DefaultExchange(context);
+        exchange.getIn().setBody(new ByteArrayInputStream(new byte[]{}));
+        exchange.getIn().setHeaders(createMobileHeaders(true, mobile));
+        
+        Exchange exchangeOut = restTemplate.send(exchange);
+        String result = exchangeOut.getMessage().getBody(String.class);
 
-    // TODO: Code Review - Need  -ve test(s) to ensure testing standard errors are being mapped correctly
+        assertTrue("null".equals(result));
+        assertTrue("204".equals(exchangeOut.getIn().getHeader(Exchange.HTTP_RESPONSE_CODE).toString()));
+    }
+    
+    @Test
+    public void testBadRequestMobileMapping() throws Exception {
+    	
+        String mobile = "0478400400";
+    	
+        Exchange exchange = new DefaultExchange(context);
+        exchange.getIn().setBody(new ByteArrayInputStream(new byte[]{}));
+        exchange.getIn().setHeaders(createMobileHeaders(true, mobile));
+        
+        Exchange exchangeOut = restTemplate.send(exchange);               
+        
+        String json = exchangeOut.getMessage().getBody(String.class);
+        assertTrue(json != null);
+        assertTrue(json.contains("DDS Operation Failed: HTTP operation failed"));
+        assertTrue(json.contains("with statusCode: 400, Bad Request\",\"code\":\"error\",\"severity\":\"error\""));
+    }  
+    
+    @Test
+    public void testUnknownHostMobileValidation() throws Exception {
+    	
+    	String mobile = "0478666776";
+
+        Exchange exchange = new DefaultExchange(context);
+        exchange.getIn().setBody(new ByteArrayInputStream(new byte[]{}));
+        exchange.getIn().setHeaders(createMobileHeaders(true, mobile));
+
+        Exchange exchangeOut = restTemplate.send(exchange);        
+        // DDSRestErrorMapping errorMapping = exchangeOut.getMessage().getBody(DDSRestErrorMapping.class);
+        String json = exchangeOut.getMessage().getBody(String.class);
+        assertTrue(json != null);
+        assertTrue(json.contains("DDS Operation Failed: HTTP operation failed"));
+        assertTrue(json.contains("with statusCode: 502, Bad Gateway\",\"code\":\"error\",\"severity\":\"error\""));
+    }      
 }

@@ -72,7 +72,6 @@
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-health</artifactId>
-			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -252,72 +251,21 @@
 					</execution>
 				</executions>
 			</plugin>
-
-			<!-- Generate loaders etc, also add generated sources dir to Maven to compile and delete on clean -->
-			<!--plugin>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-component-maven-plugin</artifactId>
-                <version>${camel-version}</version>
+			
+			<!-- Jandex Indexer -->
+            <plugin>
+                <groupId>org.jboss.jandex</groupId>
+                <artifactId>jandex-maven-plugin</artifactId>
+                <version>1.2.2</version>
                 <executions>
                     <execution>
-                        <id>generate</id>
-                        <phase>process-classes</phase>
+                        <id>make-index</id>
                         <goals>
-                            <goal>generate</goal>
+                            <goal>jandex</goal>
                         </goals>
                     </execution>
                 </executions>
-            </plugin-->
-
-			<!--plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.0.0</version>
-                <executions>
-                    <execution>
-                        <id>add-camel-component-maven-plugin-sources</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>${project.basedir}/src/generated/java</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>add-camel-component-maven-plugin-resources</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>add-resource</goal>
-                        </goals>
-                        <configuration>
-                            <resources>
-                                <resource>
-                                    <directory>${project.basedir}/src/generated/resources</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin-->
-
-			<!--plugin>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>2.4.1</version>
-                <configuration>
-                    <filesets>
-                        <fileset>
-                            <directory>${project.basedir}/src/generated</directory>
-                            <includes>
-                                <include>**</include>
-                            </includes>
-                            <followSymlinks>false</followSymlinks>
-                        </fileset>
-                    </filesets>
-                </configuration>
-            </plugin-->
+            </plugin>
 
 		</plugins>
 	</build>

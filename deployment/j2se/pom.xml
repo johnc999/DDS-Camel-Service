@@ -21,6 +21,11 @@
 			<artifactId>dds-camel-service-routes</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>au.gov.ato</groupId>
+			<artifactId>j2se-common-runtime</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
@@ -53,12 +58,22 @@
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-cdi</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.jboss</groupId>
+			<artifactId>jandex</artifactId>
+		</dependency>
 
 		<!-- JMX Support -->
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-management</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-health</artifactId>
+		</dependency>		
 
 		<!-- Apache Commons -->
 		<dependency>
@@ -157,7 +172,7 @@
 			<groupId>org.apache.camel.quarkus</groupId>
 			<artifactId>camel-quarkus-microprofile-health</artifactId>
 			<version>2.5.0</version>
-		</dependency>
+		</dependency>		
 
 		<dependency>
 			<groupId>io.hawt</groupId>
@@ -252,6 +267,22 @@
 					</execution>
 				</executions>
 			</plugin>
+			
+			<!-- Jandex Indexer -->
+            <plugin>
+                <groupId>org.jboss.jandex</groupId>
+                <artifactId>jandex-maven-plugin</artifactId>
+                <version>1.2.2</version>
+                <executions>
+                    <execution>
+                        <id>make-index</id>
+                        <goals>
+                            <goal>jandex</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+			
 			<plugin>
 				<groupId>io.hawt</groupId>
 				<artifactId>hawtio-maven-plugin</artifactId>

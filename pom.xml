@@ -131,6 +131,13 @@
 				<artifactId>grpc-netty-shaded</artifactId>
 				<version>${grpc-version}</version>
 			</dependency>
+			
+		    <!-- Health Check Support -->
+		    <dependency>
+		        <groupId>org.apache.camel</groupId>
+		        <artifactId>camel-health</artifactId>
+		        <version>${camel-version}</version>
+		    </dependency>			
 
 			<!-- SLF4J - Bridging all other loggers to logback -->
 			<dependency>
