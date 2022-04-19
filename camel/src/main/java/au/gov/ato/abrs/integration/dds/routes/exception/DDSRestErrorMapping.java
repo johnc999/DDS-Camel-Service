@@ -41,6 +41,7 @@ public class DDSRestErrorMapping extends RestErrorMapping {
                 case 408:
                 case 415:
                 case 429:
+                case 502:                	
                     setStatusCode(502); // Service unavailable
                     break;
 

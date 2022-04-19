@@ -10,10 +10,6 @@
 	<name>DDS Camel Service</name>
 
 	<properties>
-		<!-- TODO: Code Review - Missing build.timestamp and maven.build.timestamp.format
-                               Start deployment j2se and see what the build date is? -->
-
-
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>

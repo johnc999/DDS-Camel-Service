@@ -1,4 +1,3 @@
-// TODO: Code Review - Maybe routes.dds.int0048 to match other services
 package routes.dds.emailvalidation.int0048;
 
 import static org.junit.Assert.assertTrue;
@@ -42,9 +41,7 @@ public class TestSubmitEmailValidation {
     @Inject
     @Uri("direct:dds.int0048.submitEmailValidation")
     ProducerTemplate template;
-
-// TODO: Code Review - Should be testing business route, not REST route .. much easier testing and asserts work on Java ojects, not JSON
-//                     Only need 1 test to test wrapper .. TestRestWrapper    
+   
     @Inject
     @Uri("direct:rest.invoke.dds")
     ProducerTemplate restTemplate;

@@ -8,6 +8,7 @@ import java.util.Properties;
 import au.gov.ato.abrs.integration.Module;
 import au.gov.ato.abrs.integration.configuration.ConfigurationUtility;
 import au.gov.ato.abrs.integration.dds.model.EmailResponseResult;
+import au.gov.ato.abrs.integration.dds.routes.exception.DDSRestErrorMapping;
 import routes.dds.util.Utils;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
@@ -15,7 +16,6 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
-import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.cdi.Uri;
 import org.apache.camel.support.DefaultExchange;
 import org.apache.camel.test.cdi.CamelCdiRunner;
@@ -70,8 +70,6 @@ public class TestRestWrapper {
         // Clear override properties
         override.clear();
     }
-
-    // TODO: Code Review - Need  -ve test(s) to ensure testing standard errors are being mapped correctly
     
     private Map<String, Object> createEmailHeaders(boolean restCall, String email) {
         Map<String, Object> headers = new HashMap<>();
@@ -187,12 +185,17 @@ public class TestRestWrapper {
         exchange.getIn().setBody(new ByteArrayInputStream(new byte[]{}));
         exchange.getIn().setHeaders(createMobileHeaders(true, mobile));
         
-        Exchange exchangeOut = restTemplate.send(exchange);               
+        Exchange exchangeOut = restTemplate.send(exchange);       
         
+        DDSRestErrorMapping ddsRestErrorMapping = exchange.getIn().getBody(DDSRestErrorMapping.class);
+        assertEquals(422, ddsRestErrorMapping.getStatusCode());
+       
         String json = exchangeOut.getMessage().getBody(String.class);
+        Object responseCode = exchangeOut.getMessage().getHeader(Exchange.HTTP_RESPONSE_CODE);
         assertTrue(json != null);
         assertTrue(json.contains("DDS Operation Failed: HTTP operation failed"));
         assertTrue(json.contains("with statusCode: 400, Bad Request\",\"code\":\"error\",\"severity\":\"error\""));
+        assertEquals(422, responseCode);
     }  
     
     @Test
@@ -204,11 +207,16 @@ public class TestRestWrapper {
         exchange.getIn().setBody(new ByteArrayInputStream(new byte[]{}));
         exchange.getIn().setHeaders(createMobileHeaders(true, mobile));
 
-        Exchange exchangeOut = restTemplate.send(exchange);        
-        // DDSRestErrorMapping errorMapping = exchangeOut.getMessage().getBody(DDSRestErrorMapping.class);
+        Exchange exchangeOut = restTemplate.send(exchange);   
+        
+        DDSRestErrorMapping ddsRestErrorMapping = exchange.getIn().getBody(DDSRestErrorMapping.class);
+        assertEquals(502, ddsRestErrorMapping.getStatusCode());        
+        
         String json = exchangeOut.getMessage().getBody(String.class);
+        Object responseCode = exchangeOut.getMessage().getHeader(Exchange.HTTP_RESPONSE_CODE);
         assertTrue(json != null);
         assertTrue(json.contains("DDS Operation Failed: HTTP operation failed"));
         assertTrue(json.contains("with statusCode: 502, Bad Gateway\",\"code\":\"error\",\"severity\":\"error\""));
-    }      
+        assertEquals(502, responseCode);
+    }
 }
