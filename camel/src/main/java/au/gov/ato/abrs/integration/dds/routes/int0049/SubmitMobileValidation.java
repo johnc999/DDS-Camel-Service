@@ -6,6 +6,7 @@ import au.gov.ato.abrs.integration.dds.model.MobileResponseResult;
 import javax.inject.Inject;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.LoggingLevel;
 import org.apache.camel.Processor;
 import org.apache.camel.ValidationException;
 import org.apache.camel.builder.RouteBuilder;
@@ -27,9 +28,7 @@ public class SubmitMobileValidation extends RouteBuilder {
         	.routeId(ROUTE_ID)
         	
             // Protocol invoker will handle errors on a protocol level
-            .errorHandler(noErrorHandler())
-            
-            .log("header.mobile param: ${header.mobile}")     
+            .errorHandler(noErrorHandler()) 
             
             .choice()
             .when(simple("${header.mobile} == null || ${header.mobile} == ''"))            
@@ -39,7 +38,7 @@ public class SubmitMobileValidation extends RouteBuilder {
             .setHeader("Content-Type", constant("application/json"))            
             .setHeader("Accept", constant("application/json")) 
              
-            .toD(restMobileValidationEndpoint)
+            .toD(restMobileValidationEndpoint).id(ROUTE_ID + ".invokeQAS")
             
             .unmarshal().json(JsonLibrary.Jackson, MobileResponseResult.class)
                       
@@ -56,6 +55,8 @@ public class SubmitMobileValidation extends RouteBuilder {
 					
                 }
             })
+            
+            .log(LoggingLevel.INFO, "Completed for: ${header.mobile}")
             
         .end();
     }
