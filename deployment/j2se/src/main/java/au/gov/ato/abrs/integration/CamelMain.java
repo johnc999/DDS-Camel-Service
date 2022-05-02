@@ -22,7 +22,6 @@ public class CamelMain {
 		defaultConfigurationLocation();
 		loadPropertiesFileIntoSystemProperties("loki.properties");
 		loadPropertiesFileIntoSystemProperties("otel.properties");
-		loadPropertiesFileIntoSystemProperties("hawtio.properties");
 
 		log = LoggerFactory.getLogger(CamelMain.class);
 		printBanner();
