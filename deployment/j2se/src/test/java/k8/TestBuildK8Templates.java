@@ -28,6 +28,7 @@ public class TestBuildK8Templates {
     public static void startup() throws Exception {
         // Start the Camel J2SE
         try {
+            System.setProperty("DDS_URL", "http://dummy");
             CamelMain.main(new String[]{});
         } catch(Throwable ex) {
             fail("Unable to startup service");
