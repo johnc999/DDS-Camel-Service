@@ -14,10 +14,14 @@ public class SubmitEmailValidation extends RouteBuilder {
 	
 	private static String ROUTE_ID = "DDS:Int0048:SubmitEmailValidation";
 	
-    @Inject
-    @ConfigurationProperty(module = "dds", property = "dds.rest.email.validation.endpoint")
     String restEmailValidationEndpoint;
 	
+    @Inject 
+    public SubmitEmailValidation(@ConfigurationProperty(module = "dds", property = "dds.rest.email.validation.endpoint")String cfgRestEmailValidationEndpoint) {
+        // Convert config [%parameter%] to Camel ${header.xxx} paramter
+        restEmailValidationEndpoint = cfgRestEmailValidationEndpoint.replace("[%", "${").replace("%]", "}");
+    }
+
     @Override
     public void configure() throws Exception {
 

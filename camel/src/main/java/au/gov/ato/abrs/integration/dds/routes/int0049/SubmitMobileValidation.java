@@ -16,10 +16,15 @@ public class SubmitMobileValidation extends RouteBuilder {
 	
 	private static String ROUTE_ID = "DDS:Int0049:SubmitMobileValidation";
 	
-    @Inject
-    @ConfigurationProperty(module = "dds", property = "dds.rest.mobile.validation.endpoint")
     String restMobileValidationEndpoint;
-	
+
+    @Inject 
+    public SubmitMobileValidation(@ConfigurationProperty(module = "dds", property = "dds.rest.mobile.validation.endpoint")String cfgRestMobileValidationEndpoint) {
+        // Convert config [%parameter%] to Camel ${header.xxx} paramter
+        restMobileValidationEndpoint = cfgRestMobileValidationEndpoint.replace("[%", "${").replace("%]", "}");
+    }
+
+
     @Override
     public void configure() throws Exception {
 
