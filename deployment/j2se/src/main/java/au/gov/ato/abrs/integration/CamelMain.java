@@ -77,8 +77,15 @@ public class CamelMain {
 	private static void runCDIContainer() {
 		// CDI Container
 		// Will register shutdown hook
-		Weld weld = new Weld();
-		WeldContainer container = weld.initialize();
+		try {
+			Weld weld = new Weld();
+			WeldContainer container = weld.initialize();
+		} catch (Throwable ex) {
+			System.err.println("Unable to start Camel CDI");
+			ex.printStackTrace(System.err);
+			System.exit(2);
+		}
+		System.out.println();
 	}
 
 	private static void loadPropertiesFileIntoSystemProperties(String name) {

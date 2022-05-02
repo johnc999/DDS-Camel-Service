@@ -172,26 +172,6 @@
 			<artifactId>swagger-parser</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/io.smallrye/smallrye-health -->
-		<dependency>
-			<groupId>io.smallrye</groupId>
-			<artifactId>smallrye-health</artifactId>
-			<version>4.0.0-RC1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.camel.quarkus</groupId>
-			<artifactId>camel-quarkus-microprofile-health</artifactId>
-			<version>2.5.0</version>
-		</dependency>		
-
-		<dependency>
-			<groupId>io.hawt</groupId>
-			<artifactId>hawtio-embedded</artifactId>
-			<version>2.13.3</version>
-		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -293,17 +273,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-			
-			<plugin>
-				<groupId>io.hawt</groupId>
-				<artifactId>hawtio-maven-plugin</artifactId>
-				<version>2.12.0</version>
-				<configuration>
-					<logClasspath>true</logClasspath>
-					<port>8192</port>
-				</configuration>
-			</plugin>
+            </plugin>			
 		</plugins>
 
 	</build>

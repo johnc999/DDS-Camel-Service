@@ -34,7 +34,6 @@
 		<dependency>
 			<groupId>au.gov.ato</groupId>
 			<artifactId>TechnicalArchitecture</artifactId>
-			<version>${technical-architecture-version}</version>
 		</dependency>
 
 		<!-- Camel -->
@@ -87,7 +86,6 @@
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-jacksonxml</artifactId>
-			<version>${camel-jackson-xml-version}</version>
 		</dependency>
 
 		<dependency>
@@ -118,12 +116,6 @@
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-cdi</artifactId>
 			<scope>provided</scope>
-		</dependency>
-
-		<!-- CDI - Jandex -->
-		<dependency>
-			<groupId>org.jboss</groupId>
-			<artifactId>jandex</artifactId>
 		</dependency>
 
 		<dependency>
@@ -160,49 +152,46 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>${jackson-xml-databind-version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
-			<version>${jackson-xml-core-version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-xml</artifactId>
-			<version>${jackson-xml-dataformat-version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
-			<version>${jackson-xml-core-version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>javax.annotation</groupId>
 			<artifactId>javax.annotation-api</artifactId>
-			<version>${javax-annotation-api-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jsonschema2pojo</groupId>
 			<artifactId>jsonschema2pojo-jdk-annotation</artifactId>
-			<version>${json-schema-2pojo-version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>com.github.tomakehurst</groupId>
 			<artifactId>wiremock</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
-			<version>${comms-lang-version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
-			<version>${commons-beanutils-version}</version>
 		</dependency>
 
 		<!-- CDI -->

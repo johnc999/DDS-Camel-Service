@@ -4,7 +4,6 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import io.hawt.embedded.Main;
 import org.apache.camel.CamelContext;
 import org.apache.camel.health.HealthCheckRegistry;
 import org.apache.camel.impl.DefaultCamelContext;
@@ -16,8 +15,6 @@ import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.trace.Tracer;
 import au.gov.ato.abrs.integration.Module;
 
-import java.io.File;
-
 @ApplicationScoped
 public class CustomCamelContext extends DefaultCamelContext {
     @Inject
@@ -28,7 +25,7 @@ public class CustomCamelContext extends DefaultCamelContext {
     final HealthCheckRegistry checkRegistry = new DefaultHealthCheckRegistry();
 
     @PostConstruct
-    void customize() throws Exception {
+    void customize() {
         // Set Name
         setName(Module.NAME + " Camel Service");
 
@@ -44,12 +41,6 @@ public class CustomCamelContext extends DefaultCamelContext {
         otelTracer = new OpenTelemetryTracer();
         otelTracer.setTracer(tracer);
         otelTracer.init(this);
-
-        // HawtIO Monitoring
-        Main hawtMain = new Main();
-        hawtMain.setPort(Integer.valueOf(System.getProperty("hawtio.port")));
-        hawtMain.setWar(new File(System.getProperty("integration-config-path"), "hawtio-default-2.13.3.war").toString());
-        hawtMain.run();
     }
 
 }
