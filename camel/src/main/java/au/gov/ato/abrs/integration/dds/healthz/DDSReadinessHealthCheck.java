@@ -25,7 +25,7 @@ public class DDSReadinessHealthCheck extends AbstractHealthCheck {
 
     public static final long CHECK_INTERVAL_MS = 120_000l;
     
-    public static final String VALID_EMAIL = "joe@test.com";
+    public static final String VALID_EMAIL = "user@healthcheckpassed.com";
 
     private static Logger log = LoggerFactory.getLogger(DDSReadinessHealthCheck.class);
     
@@ -65,10 +65,11 @@ public class DDSReadinessHealthCheck extends AbstractHealthCheck {
             
             if (("200".equals(exchangeOut.getIn().getHeader(Exchange.HTTP_RESPONSE_CODE).toString())) &&
                ("verified".equalsIgnoreCase(response.getResponse().getVerificationLevelDescription()))) {
-                  log.info("DDS submit email validation readiness health check succeeded for valid email");
+                  log.info("DDS submit email validation readiness health check succeeded");
                   builder.up();
             } else {
-                throw new Exception("DDS submit email validation readiness healtch check failed for valid email");            
+            	log.info("DDS submit email validation readiness health check failed");
+                throw new Exception("DDS submit email validation readiness health check failed");            
             }
         } catch (Throwable ex) {
             log.warn("DDS submit email validation readiness health check FAILED: " + ex.getMessage());

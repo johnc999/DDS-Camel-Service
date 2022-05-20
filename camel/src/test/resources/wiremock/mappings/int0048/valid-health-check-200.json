@@ -1,0 +1,23 @@
+{
+    "request": {
+        "method": "GET",
+        "url": "/api/v1/organisations/validate/email/user@healthcheckpassed.com",
+        "headers": {
+            "Accept": {
+                "equalTo": "application/json"
+            }
+        },
+        "bodyPatterns": [
+            {
+                "matches": ""
+            }
+        ]
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "bodyFileName": "int0048/valid-200.json"
+    }
+}
