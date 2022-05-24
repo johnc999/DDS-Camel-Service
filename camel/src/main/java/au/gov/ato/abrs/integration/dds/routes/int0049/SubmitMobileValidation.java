@@ -32,6 +32,8 @@ public class SubmitMobileValidation extends RouteBuilder {
             
         	.routeId(ROUTE_ID)
         	
+        	.log(LoggingLevel.INFO, "SubmitMobileValidation mobile header: ${header.mobile}")
+        	
             // Protocol invoker will handle errors on a protocol level
             .errorHandler(noErrorHandler()) 
             
