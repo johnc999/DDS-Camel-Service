@@ -56,12 +56,15 @@ public class DDSReadinessHealthCheck extends AbstractHealthCheck {
                     // Remove for now: .withHeader("UID", UUID.randomUUID().toString()) .withHeader("sessionID", UUID.randomUUID().toString()) .withHeader("requestID", UUID.randomUUID().toString())
                     .build();
 
+            log.info("Exchange was built");
             Exchange exchangeOut = template.send(exchange);
             Object res = exchangeOut.getMessage().getBody();
             if (res instanceof Exception)
                 throw (Exception)res;
             
+            log.info("Returned response from Exchange");            
             MobileResponseResult response = exchangeOut.getMessage().getBody(MobileResponseResult.class);
+            log.info("Response Code: " + exchangeOut.getIn().getHeader(Exchange.HTTP_RESPONSE_CODE).toString());
             
             if (("200".equals(exchangeOut.getIn().getHeader(Exchange.HTTP_RESPONSE_CODE).toString())) &&
                ("verified".equalsIgnoreCase(response.getResponse().getVerificationLevelDescription()))) {
@@ -72,7 +75,11 @@ public class DDSReadinessHealthCheck extends AbstractHealthCheck {
                 throw new Exception("DDS submit mobile validation readiness health check failed");            
             }
         } catch (Throwable ex) {
-            log.warn("DDS submit mobile validation readiness health check FAILED: " + ex.getMessage());
+        	log.warn("DDS submit mobile validation readiness health check FAILED: " + ex.getMessage());
+        	StackTraceElement[] stktrace = ex.getStackTrace();
+        	for (int i = 0; i < stktrace.length; i++) {
+        		log.warn(stktrace[i].toString());
+        	}        	            
             builder.error(ex);
             builder.message("DDS mobile mobile validation readiness health check FAILED with " + ex.getMessage());
             builder.down();
