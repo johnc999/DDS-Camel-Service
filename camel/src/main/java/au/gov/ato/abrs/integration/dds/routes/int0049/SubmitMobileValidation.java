@@ -63,7 +63,7 @@ public class SubmitMobileValidation extends RouteBuilder {
                 }
             })
             
-            .log(LoggingLevel.INFO, "Completed for: ${header.mobile}")
+            .log(LoggingLevel.INFO, "Mobile ${header.mobile} validated")
             
         .end();
     }
