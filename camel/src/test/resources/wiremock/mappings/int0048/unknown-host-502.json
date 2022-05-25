@@ -1,7 +1,7 @@
 {
     "request": {
         "method": "GET",
-        "url": "/api/v1/organisations/validate/email/joe502@test.com",
+        "url": "/api/v1/DirectoryAddresses/EmailValidation/joe502@test.com",
         "headers": {
             "Accept": {
                 "equalTo": "application/json"

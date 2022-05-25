@@ -1,7 +1,7 @@
 {
     "request": {
         "method": "GET",
-        "url": "/api/v1/organisations/validate/mobile/0499111222",
+        "url": "/api/v1/DirectoryAddresses/MobileValidation/0499111222",
         "headers": {
             "Accept": {
                 "equalTo": "application/json"
