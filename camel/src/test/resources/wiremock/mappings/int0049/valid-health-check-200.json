@@ -6,12 +6,7 @@
             "Accept": {
                 "equalTo": "application/json"
             }
-        },
-        "bodyPatterns": [
-            {
-                "matches": ""
-            }
-        ]
+        }
     },
     "response": {
         "status": 200,
