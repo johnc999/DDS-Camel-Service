@@ -27,6 +27,7 @@ public class RestValidateEmailAddress extends RouteBuilder {
             .param()
 	            .name("email").type(RestParamType.path).dataType("string").required(true)
 	            .description("The email address to validate")
+	            .dataFormat("[A-Z0-9._%+-]+@[A-Z0-9.-]+")  // Hint for ingress controller to allow other characters for path param
             .endParam()  
             
 	        .responseMessage()

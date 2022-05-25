@@ -20,79 +20,115 @@ import au.gov.ato.abrs.integration.Module;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-
 // @Author: Johnathan Ingram (johnathan.ingram@ato.gov.au)
 public class TestBuildK8Templates {
-    
+
     @BeforeClass
     public static void startup() throws Exception {
         // Start the Camel J2SE
         try {
-            System.setProperty("DDS_URL", "http://dummy");
-            CamelMain.main(new String[]{});
-        } catch(Throwable ex) {
+            CamelMain.main(new String[] {});
+        } catch (Throwable ex) {
             fail("Unable to startup service");
         }
     }
 
     @Test
     public void buildK8Templates() throws Exception {
-        // Obtain Open API Spec
-        URL oipenAPIUrl = new URL("http://localhost:8080/api/v" + Module.translateToApiVersion(Module.VERSION) + "/" + Module.NAME.toLowerCase() + "/api-doc");
-        HttpURLConnection conn = (HttpURLConnection)oipenAPIUrl.openConnection();
+        try {
+            // Obtain Open API Spec
+            URL oipenAPIUrl = new URL("http://localhost:8080/api/v" + Module.translateToApiVersion(Module.VERSION) + "/"
+                    + Module.NAME.toLowerCase() + "/api-doc");
+            HttpURLConnection conn = (HttpURLConnection) oipenAPIUrl.openConnection();
 
-        int statusCode = conn.getResponseCode();
-        assertEquals(200, statusCode);
-        String openApi = new BufferedReader(new InputStreamReader(conn.getInputStream())).lines().collect(Collectors.joining("\n"));
-        System.out.println(openApi);
+            int statusCode = conn.getResponseCode();
+            assertEquals(200, statusCode);
+            String openApi = new BufferedReader(new InputStreamReader(conn.getInputStream())).lines()
+                    .collect(Collectors.joining("\n"));
+            System.out.println(openApi);
 
-        // Parse spec to build template
-        SwaggerParseResult swagger = new OpenAPIV3Parser().readContents(openApi);
-        OpenAPI openAPI = swagger.getOpenAPI();
+            // Parse spec to build template
+            SwaggerParseResult swagger = new OpenAPIV3Parser().readContents(openApi);
+            OpenAPI openAPI = swagger.getOpenAPI();
 
-        Map<String, String> templateVars = new HashMap<>();
-        templateVars.put("service.name", Module.NAME.toLowerCase());
-        templateVars.put("service.version", Module.translateToApiVersion(Module.VERSION));
-        templateVars.put("parent.artifact.name", Module.PARENT_ARTIFACT_ID);
-        templateVars.put("artifact.name", Module.ARTIFACT_ID);
-        templateVars.put("artifact.version", Module.VERSION);
-        templateVars.put("paths", "");
+            Map<String, String> templateVars = new HashMap<>();
+            templateVars.put("service.name", Module.NAME.toLowerCase());
+            templateVars.put("service.version", Module.translateToApiVersion(Module.VERSION));
+            templateVars.put("parent.artifact.name", Module.PARENT_ARTIFACT_ID);
+            templateVars.put("artifact.name", Module.ARTIFACT_ID);
+            templateVars.put("artifact.version", Module.VERSION);
+            templateVars.put("paths", "");
 
-        // Build API paths with path params {xxx}, that will match regex using (\w)+ and $ ends with for full match
-        openAPI.getPaths().forEach((endpoint, item) -> {
-            String paths = templateVars.get("paths");
-            String path = endpoint.replaceAll("\\{\\w+\\}", "(\\\\w)+") + "$";        
+            // Build API paths with path params {xxx}, that will match regex using (\w)+ and
+            // $ ends with for full match
+            openAPI.getPaths().forEach((endpoint, item) -> {            
+                String paths = templateVars.get("paths");
 
-            templateVars.put("endpoint", endpoint);
-            templateVars.put("path", path);
-            
-            String pathSnippet = substituteTempalate("k8/path-snippet.template", templateVars);
-            paths += pathSnippet;
-            templateVars.put("paths", paths);
+                Operation operation = null != item.getGet() ? item.getGet()
+                    : null != item.getPut() ? item.getPut()
+                        : null != item.getPatch() ? item.getPatch()
+                            : null != item.getPost() ? item.getPost()
+                                : null != item.getDelete() ? item.getDelete()
+                                    : null != item.getHead() ? item.getHead()
+                                        : null;
 
-            templateVars.remove("endpoint");
-            templateVars.remove("path");
-        });
+                List<Parameter> pathParameters = null == operation.getParameters()
+                    ? new ArrayList<>()
+                    : operation.getParameters().stream()
+                        .filter(e -> e.getIn().equalsIgnoreCase("path"))
+                        .collect(Collectors.toList());
 
+                // Note: Replace \{\w+\} with [\w_%-;,'~*#!=@:&\-\"\.\[\]\(\)\+]+
+                //       Most valid chars for path component in URI
+                String path = endpoint;
+                for (Parameter pathParam : pathParameters) {
+                    if (null != pathParam.getSchema() && null != pathParam.getSchema().getFormat()) {
+                        // Replace with actual regex in format
+                        path = path.replace("{" + pathParam.getName() + "}", pathParam.getSchema().getFormat());
+                    } else {
+                        // Default replacing with (\w)+
+                        path = path.replace("{" + pathParam.getName() + "}", "(\\w)+");
+                    }
+                }
+                path = path + "$";
 
-        // Output to the k8 dir under deployment
-        String content;
-        
-        content = substituteTempalate("k8/camel-service-deployment.template", templateVars);
-        writeTemplate(content, Module.NAME.toLowerCase() + "-v" + Module.translateToApiVersion(Module.VERSION) + "-camel-service-deployment.yaml");
+                templateVars.put("endpoint", endpoint);
+                templateVars.put("path", path);
 
-        content = substituteTempalate("k8/service.template", templateVars);
-        writeTemplate(content, Module.NAME.toLowerCase() + "-v" + Module.translateToApiVersion(Module.VERSION) + "-service.yaml");
+                String pathSnippet = substituteTempalate("k8/path-snippet.template", templateVars);
+                paths += pathSnippet;
+                templateVars.put("paths", paths);
 
-        content = substituteTempalate("k8/service-ingress.template", templateVars);
-        writeTemplate(content, Module.NAME.toLowerCase() + "-v" + Module.translateToApiVersion(Module.VERSION) + "-service-ingress.yaml");
+                templateVars.remove("endpoint");
+                templateVars.remove("path");
+            });
 
-        // Output the OpenAPI Spec File
-        writeOpenAPISpecFile(openApi);
+            // Output to the k8 dir under deployment
+            String content;
+
+            content = substituteTempalate("k8/camel-service-deployment.template", templateVars);
+            writeTemplate(content, Module.NAME.toLowerCase() + "-v" + Module.translateToApiVersion(Module.VERSION)
+                    + "-camel-service-deployment.yaml");
+
+            content = substituteTempalate("k8/service.template", templateVars);
+            writeTemplate(content,
+                    Module.NAME.toLowerCase() + "-v" + Module.translateToApiVersion(Module.VERSION) + "-service.yaml");
+
+            content = substituteTempalate("k8/service-ingress.template", templateVars);
+            writeTemplate(content, Module.NAME.toLowerCase() + "-v" + Module.translateToApiVersion(Module.VERSION)
+                    + "-service-ingress.yaml");
+
+            // Output the OpenAPI Spec File
+            writeOpenAPISpecFile(openApi);
+        } catch (Throwable ex) {
+            ex.printStackTrace(System.err);
+            throw ex;
+        }
     }
 
     private void writeOpenAPISpecFile(String content) throws IOException {
-        File specFile = new File("../openapi/", Module.NAME.toLowerCase() + "-v" + Module.translateToApiVersion(Module.VERSION) + "-" + "openapi.json");
+        File specFile = new File("../openapi/",
+                Module.NAME.toLowerCase() + "-v" + Module.translateToApiVersion(Module.VERSION) + "-" + "openapi.json");
         if (specFile.exists())
             specFile.delete();
 
@@ -112,20 +148,20 @@ public class TestBuildK8Templates {
         Files.write(deploymentTeamplate.toPath(), content.getBytes(StandardCharsets.UTF_8));
     }
 
-    private String substituteTempalate(String template, Map<String, String> templateVars) {    
+    private String substituteTempalate(String template, Map<String, String> templateVars) {
         InputStream is = this.getClass().getClassLoader().getResourceAsStream(template);
         String content = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))
-            .lines()
-            .collect(Collectors.joining("\n"));
+                .lines()
+                .collect(Collectors.joining("\n"));
 
         content = substituteString(content, templateVars);
         return content;
     }
 
-    private String substituteString(String content, Map<String, String> templateVars) {    
+    private String substituteString(String content, Map<String, String> templateVars) {
         for (String name : templateVars.keySet()) {
             content = content.replace("{" + name + "}", templateVars.get(name));
         }
-        return content;        
+        return content;
     }
 }

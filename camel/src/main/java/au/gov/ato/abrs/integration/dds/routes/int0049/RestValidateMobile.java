@@ -27,6 +27,7 @@ public class RestValidateMobile extends RouteBuilder {
             .param()
                 .name("mobile").type(RestParamType.path).dataType("string").required(true)
                 .description("The mobile phone number to validate")
+                .dataFormat("[ 0-9+-\\.\\(\\)]+")  // Hint for ingress controller to allow other characters for path param
             .endParam()
             
             .responseMessage()
