@@ -14,11 +14,16 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 import au.gov.ato.abrs.integration.Module;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
+import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.parameters.Parameter;
 
 // @Author: Johnathan Ingram (johnathan.ingram@ato.gov.au)
 public class TestBuildK8Templates {
