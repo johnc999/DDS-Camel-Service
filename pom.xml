@@ -16,14 +16,9 @@
 
 		<camel-version>3.14.1</camel-version>
 		<jackson-version>2.13.0</jackson-version>
-		<!-- <jackson-xml-databind-version>2.12.5</jackson-xml-databind-version>
-		<jackson-xml-core-version>2.13.0</jackson-xml-core-version>
-		<jackson-xml-annotation-version>2.13.0</jackson-xml-annotation-version>
-		<jackson-xml-dataformat-version>2.12.3</jackson-xml-dataformat-version> -->
-		<!-- <camel-jackson-xml-version>3.11.0</camel-jackson-xml-version> -->
 		<comms-lang-version>2.6</comms-lang-version>
 		<commons-beanutils-version>1.9.4</commons-beanutils-version>
-		<technical-architecture-version>1.0-SNAPSHOT</technical-architecture-version>
+		<technical-architecture-version>1.1-SNAPSHOT</technical-architecture-version>
 		<javax-annotation-api-version>1.3.2</javax-annotation-api-version>
 		<json-schema-2pojo-version>0.0.1</json-schema-2pojo-version>
 		<cxf-rt-frontend-jaxws-version>3.4.4</cxf-rt-frontend-jaxws-version>
