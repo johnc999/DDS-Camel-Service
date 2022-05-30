@@ -2,6 +2,12 @@ target/
 generated/
 *-openapi.json
 *-service*.yaml
+Dockerfile
+Module.java
+README.START
+loki.properties
+otel.properties
+prometheus-agent-config.yml
 
 ### IntelliJ IDEA ###
 .idea
@@ -40,4 +46,3 @@ hs_err_pid*
 model/src/main/java/META-INF/MANIFEST.MF
 deployment/spring/src/main/java/META-INF/MANIFEST.MF
 camel/src/main/java/META-INF/MANIFEST.MF
-/bin/

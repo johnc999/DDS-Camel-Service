@@ -11,8 +11,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 
 		<camel-version>3.14.1</camel-version>
 		<jackson-version>2.13.0</jackson-version>
@@ -35,13 +35,12 @@
 		<camel-aws-s3-version>3.8.0</camel-aws-s3-version>
 		<jsonwebtoken-version>0.11.2</jsonwebtoken-version>
 		<slf4j-version>1.7.32</slf4j-version>
-		<swagger-ui-version>4.1.2</swagger-ui-version>
-		<grpc-version>1.41.0</grpc-version>
 		<ch.qos.logback-version>1.2.7</ch.qos.logback-version>
 		<lombok-version>1.18.20</lombok-version>
 		<jaxb-api-version>2.3.1</jaxb-api-version>
 		<jmx.prometheus.javaagent.version>0.16.1</jmx.prometheus.javaagent.version>
 
+		<service.name>DDS</service.name>
 		<build.timestamp>${maven.build.timestamp}</build.timestamp>
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
 	</properties>
@@ -88,43 +87,7 @@
 			<dependency>
 				<groupId>au.gov.ato</groupId>
 				<artifactId>j2se-common-runtime</artifactId>
-				<version>1.0-SNAPSHOT</version>
-			</dependency>
-
-			<!-- Swagger UI webjar -->
-			<dependency>
-				<groupId>org.webjars</groupId>
-				<artifactId>swagger-ui</artifactId>
-				<version>4.1.2</version>
-			</dependency>
-
-			<!-- OpenTelemetry -->
-			<dependency>
-				<groupId>io.opentelemetry</groupId>
-				<artifactId>opentelemetry-bom</artifactId>
-				<version>1.9.1</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>io.opentelemetry</groupId>
-				<artifactId>opentelemetry-bom-alpha</artifactId>
-				<version>1.9.1-alpha</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>io.grpc</groupId>
-				<artifactId>grpc-protobuf</artifactId>
-				<version>${grpc-version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>io.grpc</groupId>
-				<artifactId>grpc-netty-shaded</artifactId>
-				<version>${grpc-version}</version>
+				<version>1.1-SNAPSHOT</version>
 			</dependency>
 
 			<!-- SLF4J - Bridging all other loggers to logback -->
@@ -168,31 +131,6 @@
 				<groupId>ch.qos.logback</groupId>
 				<artifactId>logback-core</artifactId>
 				<version>${ch.qos.logback-version}</version>
-			</dependency>
-
-			<!-- Logback - Loki -->
-			<dependency>
-				<groupId>com.github.loki4j</groupId>
-				<artifactId>loki-logback-appender-jdk8</artifactId>
-				<version>1.3.1</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.httpcomponents</groupId>
-				<artifactId>httpclient</artifactId>
-				<version>4.5.13</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.google.protobuf</groupId>
-				<artifactId>protobuf-java</artifactId>
-				<version>3.19.1</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.xerial.snappy</groupId>
-				<artifactId>snappy-java</artifactId>
-				<version>1.1.8.4</version>
 			</dependency>
 			
 			<!-- Jwt Support -->
@@ -284,13 +222,6 @@
 				<version>3.1.7.Final</version>
 			</dependency>
 
-			<!-- CDI - Jandex -->
-			<dependency>
-				<groupId>org.jboss</groupId>
-				<artifactId>jandex</artifactId>
-				<version>2.4.2.Final</version>
-			</dependency>
-
 			<!-- Apache Commons -->
 			<dependency>
 				<groupId>commons-io</groupId>
@@ -308,25 +239,6 @@
 				<groupId>commons-beanutils</groupId>
 				<artifactId>commons-beanutils</artifactId>
 				<version>1.9.4</version>
-			</dependency>
-
-
-			<dependency>
-				<groupId>org.apache.httpcomponents</groupId>
-				<artifactId>httpclient</artifactId>
-				<version>4.5.13</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.google.protobuf</groupId>
-				<artifactId>protobuf-java</artifactId>
-				<version>3.19.1</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.xerial.snappy</groupId>
-				<artifactId>snappy-java</artifactId>
-				<version>1.1.8.4</version>
 			</dependency>
 
 		</dependencies>

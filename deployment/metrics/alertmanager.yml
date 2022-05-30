@@ -1,9 +1,0 @@
-route:
-  receiver: 'requestbin_receiver'
-  group_wait: 0s
-
-receivers:
-  - name: 'requestbin_receiver'
-    webhook_configs:
-      - url: 'http://host.docker.internal:9095/alerts'
-

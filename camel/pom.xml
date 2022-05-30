@@ -211,20 +211,32 @@
 
 	<build>
 		<plugins>
-			<!-- Jandex Indexer -->
-			<plugin>
-				<groupId>org.jboss.jandex</groupId>
-				<artifactId>jandex-maven-plugin</artifactId>
-				<version>1.2.2</version>
-				<executions>
-					<execution>
-						<id>make-index</id>
-						<goals>
-							<goal>jandex</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+
+		    <!-- Extract Module Template -->
+		    <plugin>
+		      <groupId>org.apache.maven.plugins</groupId>
+		      <artifactId>maven-dependency-plugin</artifactId>
+		      <version>3.3.0</version>
+		      <executions>
+		        <execution>
+		          <id>module-template-dependency</id>
+		          <phase>generate-sources</phase>
+		          <goals>
+		            <goal>unpack</goal>
+		          </goals>
+		          <configuration>
+		            <artifactItems>
+		              <artifactItem>
+		                <groupId>au.gov.ato</groupId>
+		                <artifactId>j2se-common-runtime</artifactId>
+		                <outputDirectory>${project.basedir}/src/main</outputDirectory>
+		                <includes>java-templates/au/gov/ato/abrs/integration/Module.java</includes>
+		              </artifactItem>
+		            </artifactItems>
+		          </configuration>
+		        </execution>
+		      </executions>
+		    </plugin>
 
 			<!-- Module Template -->
 			<plugin>

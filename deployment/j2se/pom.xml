@@ -29,28 +29,7 @@
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-jetty</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-http</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-core</artifactId>
-		</dependency>
-
-		<!-- OpenTelemetry -->
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-opentelemetry</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-openapi-java</artifactId>
 		</dependency>
 
 		<!-- CDI -->
@@ -60,25 +39,8 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>org.jboss</groupId>
-			<artifactId>jandex</artifactId>
-		</dependency>
-
-		<!-- JMX Support -->
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-management</artifactId>
-		</dependency>
-		
-		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-health</artifactId>
-		</dependency>		
-
-		<!-- Apache Commons -->
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
 		</dependency>
 
 		<dependency>
@@ -90,17 +52,6 @@
 		<dependency>
 			<groupId>javax.enterprise</groupId>
 			<artifactId>cdi-api</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jboss.weld.se</groupId>
-			<artifactId>weld-se-core</artifactId>
-		</dependency>
-
-		<!-- Swagger UI webjar -->
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>swagger-ui</artifactId>
 		</dependency>
 
 		<!-- SLF4J - Bridging all other loggers to logback -->
@@ -134,36 +85,9 @@
 			<artifactId>logback-core</artifactId>
 		</dependency>
 
-		<!-- Logback - Loki -->
-		<dependency>
-			<groupId>com.github.loki4j</groupId>
-			<artifactId>loki-logback-appender-jdk8</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.protobuf</groupId>
-			<artifactId>protobuf-java</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.xerial.snappy</groupId>
-			<artifactId>snappy-java</artifactId>
-		</dependency>
-
-
 		<dependency>
 			<groupId>javax.xml</groupId>
 			<artifactId>webservices-api</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.xerial.snappy</groupId>
-			<artifactId>snappy-java</artifactId>
 		</dependency>
 
 		<!-- Swagger Parser -->
@@ -273,7 +197,58 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>			
+            </plugin>	
+            
+            <!-- Extract Dockerfile and common configuration -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>common-config</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>au.gov.ato</groupId>
+                                    <artifactId>j2se-common-runtime</artifactId>
+                                    <outputDirectory>${project.basedir}/src/main</outputDirectory>
+                                    <includes>configuration/*.*</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>dockerfile-dependency</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>au.gov.ato</groupId>
+                                    <artifactId>j2se-common-runtime</artifactId>
+                                    <outputDirectory>${project.basedir}</outputDirectory>
+                                    <includes>docker/Dockerfile</includes>
+                                    <fileMappers>
+                                    <org.codehaus.plexus.components.io.filemappers.RegExpFileMapper>
+                                        <pattern>^\Qdocker/\E</pattern>
+                                        <replacement>./</replacement>
+                                    </org.codehaus.plexus.components.io.filemappers.RegExpFileMapper>
+                                    </fileMappers>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+		
 		</plugins>
 
 	</build>

@@ -1,9 +1,0 @@
-
-          # Endpoint: {endpoint}
-          - path: {path}
-            pathType: Exact
-            backend:
-              service:
-                name: {service.name}-service-v{service.version}
-                port:
-                  number: 8080
