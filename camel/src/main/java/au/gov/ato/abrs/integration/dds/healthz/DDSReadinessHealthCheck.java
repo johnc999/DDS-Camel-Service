@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import au.gov.ato.abrs.integration.Module;
-import au.gov.ato.abrs.integration.dds.model.MobileResponseResult;
 
 @ApplicationScoped
 @HealthCheck("dds-readiness-check")
