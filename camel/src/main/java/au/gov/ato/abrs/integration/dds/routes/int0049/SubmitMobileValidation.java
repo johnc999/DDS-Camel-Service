@@ -19,7 +19,7 @@ public class SubmitMobileValidation extends RouteBuilder {
     String restMobileValidationEndpoint;
 
     @Inject 
-    public SubmitMobileValidation(@ConfigurationProperty(module = "dds", property = "dds.rest.mobile.validation.endpoint")String cfgRestMobileValidationEndpoint) {
+    public SubmitMobileValidation(@ConfigurationProperty(module = "dds", property = "dds.rest.mobile.validation.endpoint") String cfgRestMobileValidationEndpoint) {
         // Convert config [%parameter%] to Camel ${header.xxx} paramter
         restMobileValidationEndpoint = cfgRestMobileValidationEndpoint.replace("[%", "${").replace("%]", "}");
     }
@@ -48,7 +48,7 @@ public class SubmitMobileValidation extends RouteBuilder {
             .toD(restMobileValidationEndpoint).id(ROUTE_ID + ".invokeQAS")
             
             .unmarshal().json(JsonLibrary.Jackson, MobileResponseResult.class)
-                      
+            // TODO: Change this to .bean(this, "methodName")? So you can put the logic out of the route in a separate method.
             .process(new Processor() {
 				public void process(Exchange exchange) throws Exception {    
 					

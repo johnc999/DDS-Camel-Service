@@ -17,7 +17,7 @@ public class SubmitEmailValidation extends RouteBuilder {
     String restEmailValidationEndpoint;
 	
     @Inject 
-    public SubmitEmailValidation(@ConfigurationProperty(module = "dds", property = "dds.rest.email.validation.endpoint")String cfgRestEmailValidationEndpoint) {
+    public SubmitEmailValidation(@ConfigurationProperty(module = "dds", property = "dds.rest.email.validation.endpoint") String cfgRestEmailValidationEndpoint) {
         // Convert config [%parameter%] to Camel ${header.xxx} paramter
         restEmailValidationEndpoint = cfgRestEmailValidationEndpoint.replace("[%", "${").replace("%]", "}");
     }

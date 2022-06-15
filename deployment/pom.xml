@@ -9,6 +9,7 @@
      <version>1.0-SNAPSHOT</version>
    </parent>
 
+  <!-- TODO: groupId can be removed -->
   <groupId>au.gov.ato.abrs</groupId>
   <artifactId>dds-camel-service-deployment</artifactId>
   <packaging>pom</packaging>

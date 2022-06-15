@@ -58,7 +58,8 @@ public class RestInvoker extends RouteBuilder {
             .routeId(ROUTE_ID_BASE + "Invoke")
             
             .unmarshal(new JsonPojoMarshaller())
-            
+
+            // TODO: looks header("dds-to-impl-route") will never be null so the check can be removed.
             .choice()
             	.when(header("dds-to-impl-route").isNotNull())
             	.log("${header.dds-to-impl-route}")
