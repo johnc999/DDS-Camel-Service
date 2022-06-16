@@ -15,8 +15,6 @@ public class RestValidateMobile extends RouteBuilder {
     public void configure() throws Exception {
     	
         rest("/organisations")
-			// TODO: Call id("") twice. Can remove this.
-            .id("rest.dds.int0049.validatemobile")
             .get("/validate/mobile/{mobile}")
             .bindingMode(RestBindingMode.off)            
             .description("Validate mobile")

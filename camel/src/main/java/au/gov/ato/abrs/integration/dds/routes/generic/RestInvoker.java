@@ -59,14 +59,9 @@ public class RestInvoker extends RouteBuilder {
             
             .unmarshal(new JsonPojoMarshaller())
 
-            // TODO: looks header("dds-to-impl-route") will never be null so the check can be removed.
-            .choice()
-            	.when(header("dds-to-impl-route").isNotNull())
-            	.log("${header.dds-to-impl-route}")
-            		.toD("${header.dds-to-impl-route}")
-            	.otherwise()
-            		.process(e -> { throw new Exception("");})
-            .end()		
+            .log("${header.dds-to-impl-route}")
+            
+            .toD("${header.dds-to-impl-route}")		
 
             .log(LoggingLevel.TRACE, "dds implementation route ${header.dds-to-impl-route} completed")
         .to("direct:rest.response.dds");

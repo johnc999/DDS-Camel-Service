@@ -15,8 +15,6 @@ public class RestValidateEmailAddress extends RouteBuilder {
     public void configure() throws Exception {
 
         rest("/organisations")
-			// TODO: Call id("") twice. Can remove this.
-            .id("rest.dds.int0048.validateemail")
             .get("/validate/email/{email}")
             .bindingMode(RestBindingMode.off)            
             .description("Validate email address")

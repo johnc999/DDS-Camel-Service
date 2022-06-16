@@ -7,7 +7,6 @@ import javax.inject.Inject;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
-import org.apache.camel.Processor;
 import org.apache.camel.ValidationException;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.dataformat.JsonLibrary;
@@ -48,23 +47,21 @@ public class SubmitMobileValidation extends RouteBuilder {
             .toD(restMobileValidationEndpoint).id(ROUTE_ID + ".invokeQAS")
             
             .unmarshal().json(JsonLibrary.Jackson, MobileResponseResult.class)
-            // TODO: Change this to .bean(this, "methodName")? So you can put the logic out of the route in a separate method.
-            .process(new Processor() {
-				public void process(Exchange exchange) throws Exception {    
-					
-					MobileResponseResult responseWrapperIn = exchange.getIn().getBody(MobileResponseResult.class);
-					
-					if ("3".equals(responseWrapperIn.getResponse().getVerificationStatus())) {
-						exchange.getIn().setBody(null); 	// generic rest invoker will return http response status: 204
-					} else {
-						exchange.getIn().setHeader("dds-success-status-code", 200);
-					}
-					
-                }
-            })
+            
+            .bean(this, "checkMobileResponse")
             
             .log(LoggingLevel.INFO, "Mobile ${header.mobile} validated")
             
         .end();
+    }
+    
+    MobileResponseResult checkMobileResponse(Exchange exchange) {
+    	MobileResponseResult responseWrapperIn = exchange.getIn().getBody(MobileResponseResult.class);
+    	if ("3".equals(responseWrapperIn.getResponse().getVerificationStatus())) {
+    		return null;        // RestOnvoker will set status code 204
+    	} else {
+    		exchange.getIn().setHeader("dds-success-status-code", 200);
+    		return responseWrapperIn;
+    	}
     }
 }
